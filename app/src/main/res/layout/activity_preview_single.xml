@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.github.chrisbanes.photoview.PhotoView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/iv_show"
+    android:scaleType="centerCrop"
+    android:transitionName="preview"
+    android:layout_height="match_parent">
+
+</com.github.chrisbanes.photoview.PhotoView>
