@@ -19,29 +19,21 @@
         android:id="@+id/tv_show"
         android:background="#1abc9c"
         />
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:scaleType="centerCrop"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:layout_width="100dp"
-            android:id="@+id/iv_selected"
-            android:scaleType="center"
-            android:src="@mipmap/icon_add_img"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_height="200dp">
-        </ImageView>
-        <ImageView
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_gravity="top|right"
-            android:id="@+id/iv_deleted"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/icon_deleted"
-            android:layout_height="wrap_content"/>
-    </FrameLayout>
-
+ <com.docwei.cameraphotodemo.single.SingleImagePickerView
+     android:layout_width="100dp"
+     android:layout_height="150dp"
+     android:id="@+id/pick"
+     />
+    <com.docwei.cameraphotodemo.single.SingleImagePickerView
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        android:id="@+id/pick2"
+        />
+    <com.docwei.cameraphotodemo.single.SingleImagePickerView
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        android:id="@+id/pick3"
+        />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
