@@ -7,21 +7,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
-import com.docwei.cameraphotodemo.DensityUtil;
-import com.docwei.cameraphotodemo.MainActivity;
 import com.docwei.cameraphotodemo.R;
 import com.github.chrisbanes.photoview.PhotoView;
-
-import java.util.ArrayList;
 
 /**
  * Created by git on 2018/4/29.

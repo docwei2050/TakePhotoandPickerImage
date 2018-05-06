@@ -1,155 +1,72 @@
 package com.docwei.cameraphotodemo;
 
 import android.Manifest;
-import android.content.ContentUris;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
+import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
-
-import com.docwei.cameraphotodemo.album.GriditemDecoration;
+import com.bumptech.glide.Glide;
 import com.docwei.cameraphotodemo.album.ImageChooseActivity;
 import com.docwei.cameraphotodemo.album.PreviewSingleImageActivity;
-import com.docwei.cameraphotodemo.album.RectImageView;
 import com.docwei.cameraphotodemo.dialog.DialogPlus;
 import com.docwei.cameraphotodemo.permission.CheckPermission;
 import com.docwei.cameraphotodemo.permission.PermissionOptions;
 import com.docwei.cameraphotodemo.permission.PermissionResultListener;
 
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import io.reactivex.Flowable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
-import top.zibin.luban.Luban;
-import top.zibin.luban.OnCompressListener;
+/**
+ * Created by git on 2018/5/6.
+ */
 
-public class MainActivity extends AppCompatActivity {
-
-    private TextView    mTv_show;
-    private ViewGroup   mDecorView;
-    private FrameLayout mBaseContainer;
-    private FrameLayout mContent_container;
-    private View        mContentView;
-    private FrameLayout mContent_container1;
-    private Uri         mImageUri;
-
+public class ImageSingleActivity extends AppCompatActivity{
     private int TAKE_PHOTO   = 100;
     private int SELECT_ALBUM = 101;
-    private ImageView mIv;
-    private RecyclerView mRv_image;
-    private ImageSelectedAdapter mImagesAdapter;
-    private TextView mTv_upload;
+    private ImageView mIv_selected;
+    private ImageView mIv_deleted;
+    private Uri         mImageUri;
+    private String mPhotoUrl;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        mTv_show = findViewById(R.id.tv_show);
-        mIv = findViewById(R.id.iv);
-        mRv_image = findViewById(R.id.recycler_img);
-        mTv_upload = findViewById(R.id.tv_upload);
-        mRv_image.setLayoutManager(new GridLayoutManager(this,4));
-        mImagesAdapter = new ImageSelectedAdapter(this,9);
-
-        mRv_image.setAdapter(mImagesAdapter);
-        initClick8();
-
-    }
-
-
-    private void initClick8() {
-        mImagesAdapter.setOnImageHandleListener(new ImageSelectedAdapter.OnImageHandleListener() {
-            @Override
-            public void previewImage(String imagePath, RectImageView iv) {
-                PreviewSingleImageActivity.startActivity(MainActivity.this,imagePath,iv);
-            }
-
-            @Override
-            public void addImages(int count) {
-                show(count);
-            }
-        });
-        mTv_upload.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_image_single);
+        mIv_selected = findViewById(R.id.iv_selected);
+        mIv_deleted = findViewById(R.id.iv_deleted);
+        mIv_selected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<String> list = mImagesAdapter.getSelectImages();
-                if (list.size() == 0) {
-                    //无须压缩
-                    return;
+                if(TextUtils.isEmpty(mPhotoUrl)) {
+                    show(1);
+                }else{
+                    PreviewSingleImageActivity.startActivity(ImageSingleActivity.this, mPhotoUrl, mIv_selected);
                 }
-                Flowable.just(list)
-                        .observeOn(Schedulers.io())
-                        .map(new Function<List<String>, List<File>>() {
-                            @Override
-                            public List<File> apply(@NonNull List<String> list)
-                                    throws Exception
-                            {
-
-                                return Luban.with(MainActivity.this)
-                                            .setTargetDir(getPath())
-                                            .load(list)
-                                            .get();
-                            }
-                        })
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<List<File>>() {
-                            @Override
-                            public void accept(@NonNull List<File> list)
-                                    throws Exception
-                            {
-                                //发射一个上传一个到七牛云
-                                Toast.makeText(MainActivity.this, "压缩完成", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-
-            }});
-
+            }
+        });
+        mIv_deleted.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPhotoUrl=null;
+                displayImage(mPhotoUrl);
+            }
+        });
     }
-    private String getPath() {
-        String path = getExternalCacheDir() + "/images";
-        File file = new File(path);
-        if (file.mkdirs()) {
-            return path;
-        }
-        return path;
-    }
-
     private void show(final int count) {
         TakePhotoVH viewHolder = new TakePhotoVH(this);
 
@@ -179,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 if (Build.VERSION.SDK_INT >= 24) {
-                    mImageUri = FileProvider.getUriForFile(MainActivity.this,
+                    mImageUri = FileProvider.getUriForFile(ImageSingleActivity.this,
                                                            "com.docwei.cameraphotodemo.fileprovider",
                                                            outputImage);
                 } else {
@@ -193,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void selectAlbum() {
-                CheckPermission.getInstance(MainActivity.this)
+                CheckPermission.getInstance(ImageSingleActivity.this)
                                .request(new PermissionOptions.Builder().setRationalMessage(
                                        "要允许酒葫芦访问您设备上的图片、媒体内容吗？")
                                                                        .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -205,12 +122,12 @@ public class MainActivity extends AppCompatActivity {
                                                 //openAlbum();
 
                                                 //使用非系统的实现
-                                                ImageChooseActivity.startForResult(MainActivity.this,count,SELECT_ALBUM);
+                                                ImageChooseActivity.startForResult(ImageSingleActivity.this, count, SELECT_ALBUM);
                                             }
 
                                             @Override
                                             public void onDenied(List<String> permissions) {
-                                                Toast.makeText(MainActivity.this,
+                                                Toast.makeText(ImageSingleActivity.this,
                                                                "您拒绝访问图片的权限了，所以无法使用图片",
                                                                Toast.LENGTH_SHORT)
                                                      .show();
@@ -226,23 +143,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == TAKE_PHOTO) {
             if (resultCode == RESULT_OK) {
-                try {
-                    mImagesAdapter.updateDataFromCamera(mImageUri.toString());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                mPhotoUrl = mImageUri.toString();
+                displayImage(mPhotoUrl);
             }
         } else if (requestCode == SELECT_ALBUM) {
             if (resultCode == RESULT_OK) {
                 if(data!=null){
-                    ArrayList<String> list= (ArrayList<String>) data.getSerializableExtra("images");
+                    ArrayList<String> list = (ArrayList<String>) data.getSerializableExtra("images");
                     if(list!=null&& list.size()>0) {
-                        mImagesAdapter.updateDataFromAlbum(list);
+                        mPhotoUrl=list.get(0);
+                        displayImage(mPhotoUrl);
                     }
                 }
             }
         }
     }
-
-
+    public void displayImage(String url){
+        GlideApp.with(this).load(url).placeholder(R.mipmap.icon_add_img).error(R.mipmap.icon_add_img).into(mIv_selected);
+        mIv_deleted.setVisibility(TextUtils.isEmpty(url)?View.GONE:View.VISIBLE);
+    }
 }
