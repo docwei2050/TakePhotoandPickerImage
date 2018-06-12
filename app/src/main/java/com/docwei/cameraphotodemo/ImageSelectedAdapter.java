@@ -3,17 +3,17 @@ package com.docwei.cameraphotodemo;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.docwei.cameraphotodemo.album.RectImageView;
+
+import com.docwei.imageupload_lib.GlideApp;
+import com.docwei.imageupload_lib.view.RectImageView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -27,12 +27,10 @@ public class ImageSelectedAdapter extends RecyclerView.Adapter<ImageSelectedAdap
     private int TYPE_NORMAL=1;
     private int maxCount;
     private List<String>   list;
-    private    RequestOptions mRequestOptions;
     public ImageSelectedAdapter(Context context,int count) {
         mContext = context;
         maxCount=count;
-        mRequestOptions = new RequestOptions().placeholder(R.drawable.img_default)
-                                              .error(R.drawable.img_fail);
+
         list=new ArrayList<>();
         list.add("add");
     }
@@ -57,14 +55,21 @@ public class ImageSelectedAdapter extends RecyclerView.Adapter<ImageSelectedAdap
         }
 
     }
-    public void updateDataFromAlbum(List<String> images){
-        list.addAll(0,images);
-        notifyDataSetChanged();
+    public void updateDataFromAlbum(List<String> images) {
+        if (images.size() > 0) {
+            int lastIndex = (list.size() - 1) < 0 ? 0 : list.size() - 1;
+            list.addAll(lastIndex, images);
+            notifyItemRangeChanged(lastIndex, images.size() + 1);
+        }
 
     }
-    public void updateDataFromCamera(String string){
-        list.add(0,string);
-        notifyDataSetChanged();
+
+    public void updateDataFromCamera(String path) {
+        if (!TextUtils.isEmpty(path)) {
+            int lastIndex = (list.size() - 1) < 0 ? 0 : list.size() - 1;
+            list.add(lastIndex, path);
+            notifyItemRangeChanged(lastIndex, 2);
+        }
     }
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
@@ -81,9 +86,9 @@ public class ImageSelectedAdapter extends RecyclerView.Adapter<ImageSelectedAdap
                 }
             });
         }else {
-            Glide.with(mContext)
-                 .load(list.get(position))
-                 .apply(mRequestOptions)
+            GlideApp.with(mContext)
+                 .load(list.get(position)).placeholder(R.drawable.img_default)
+                    .error(R.drawable.img_fail)
                  .into(holder.mIv_selected);
             if(holder instanceof NormalVH){
                 NormalVH vh= (NormalVH) holder;
@@ -111,17 +116,17 @@ public class ImageSelectedAdapter extends RecyclerView.Adapter<ImageSelectedAdap
         int position= (int) v.getTag();
         //删除图片
         list.remove(position);
-        notifyDataSetChanged();
+        notifyItemRangeChanged(position, list.size() - position + 1);
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(list.size()==1&&position==0){
+        if (list.size() == 1 && position == 0) {
             return TYPE_ADD;
         } else {
-            if(position<list.size()-1){
+            if (position < list.size() - 1) {
                 return TYPE_NORMAL;
-            }else{
+            } else {
                 return TYPE_ADD;
             }
         }

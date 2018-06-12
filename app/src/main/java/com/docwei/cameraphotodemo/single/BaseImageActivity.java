@@ -7,21 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by git on 2018/5/6.
+ * Created by wk on 2018/4/30.
+ * 配合一个页面，多处上传单张图片的场景
  */
 
 public abstract class BaseImageActivity extends AppCompatActivity {
-
- /*
-    public ISelectImageListener mSelectImageListener;
-
-    public void setISelectImageListener(ISelectImageListener ISelectImageListener) {
-        mSelectImageListener = ISelectImageListener;
-    }
-
-    public interface ISelectImageListener{
-        void selectImage(String imagePath);
-    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

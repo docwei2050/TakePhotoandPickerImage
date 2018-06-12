@@ -1,7 +1,6 @@
 package com.docwei.cameraphotodemo.single;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,15 +17,17 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.docwei.cameraphotodemo.GlideApp;
+
 import com.docwei.cameraphotodemo.R;
-import com.docwei.cameraphotodemo.TakePhotoVH;
-import com.docwei.cameraphotodemo.album.ImageChooseActivity;
-import com.docwei.cameraphotodemo.album.PreviewSingleImageActivity;
-import com.docwei.cameraphotodemo.dialog.DialogPlus;
-import com.docwei.cameraphotodemo.permission.CheckPermission;
-import com.docwei.cameraphotodemo.permission.PermissionOptions;
-import com.docwei.cameraphotodemo.permission.PermissionResultListener;
+import com.docwei.imageupload_lib.GlideApp;
+
+import com.docwei.imageupload_lib.TakePhotoVH;
+import com.docwei.imageupload_lib.album.ImageChooseActivity;
+import com.docwei.imageupload_lib.album.PreviewSingleImageActivity;
+import com.docwei.imageupload_lib.dialog.DialogPlus;
+import com.docwei.imageupload_lib.permission.CheckPermission;
+import com.docwei.imageupload_lib.permission.PermissionOptions;
+import com.docwei.imageupload_lib.permission.PermissionResultListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,9 +37,9 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by git on 2018/5/6.
+ * Created by wk on 2018/5/6.
+ * 单张图片上传，适配Fragment和activity
  */
-
 public class SingleImagePickerView extends FrameLayout {
     private int TAKE_PHOTO  ;
     private int SELECT_ALBUM ;
@@ -70,16 +71,16 @@ public class SingleImagePickerView extends FrameLayout {
     {
         super(context, attrs, defStyleAttr);
         mContext=context;
-        View view=View.inflate(context, R.layout.single_img_picker, this);
-        mIv_selected = findViewById(R.id.iv_selected);
-        mIv_deleted = findViewById(R.id.iv_deleted);
+        View view=View.inflate(context, R.layout.single_image_picker, this);
+        mIv_selected = view.findViewById(R.id.iv_selected);
+        mIv_deleted = view.findViewById(R.id.iv_deleted);
     }
     private Context mContext;
     private BaseImageActivity mActivity;
 
     public  SingleImagePickerView init(BaseImageActivity activity){
         mActivity=activity;
-        mIv_selected.setOnClickListener(new View.OnClickListener() {
+        mIv_selected.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(TextUtils.isEmpty(mPhotoUrl)) {
@@ -89,7 +90,7 @@ public class SingleImagePickerView extends FrameLayout {
                 }
             }
         });
-        mIv_deleted.setOnClickListener(new View.OnClickListener() {
+        mIv_deleted.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 mPhotoUrl=null;

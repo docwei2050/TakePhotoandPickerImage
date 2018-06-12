@@ -5,55 +5,13 @@
   <color name="common_colorAccent">#FF35A452</color>
   <color name="dialogplus_card_shadow">#D4D4D4</color>
   <color name="dialogplus_black_overlay">#60000000</color>
-  <color name="common_color_black">#ff000000</color>
-  <color name="common_color_black_trans">#aa000000</color>
+  <color name="common_color_light_grey_bg">#FF949494</color>
 
-
-
-
-  <color name="common_color_white">#ffffff</color>
-  <color name="common_color_pure_white">#55ffffff</color>
-  <color name="common_color_deep_white">#ccffffff</color>
-  <color name="common_toast_color">#ee5A5A5A</color>
-  <color name="common_bg">#FFE3E3E3</color>
-  <color name="common_light_white">#ccE3E3E3</color>
-  <color name="common_color_green">#FF29763A</color>
-  <color name="common_color_light_green">#FF8BB237</color>
   <color name="common_color_title_green">#FF35A452</color>
-  <color name="common_color_light_green2">#FF46AD60</color>
-  <color name="common_color_light_green4">#FF48E055</color>
-  <color name="common_color_light_green3">#FFC9EBCE</color>
-  <color name="common_color_light_green6">#FFCDF2E3</color>
   <color name="common_color_light_green5">#FF55B570</color>
 
+  <color name="image_bg">#FFE3E3E3</color>
+  <color name="image_white">#ffffff</color>
 
-
-  <color name="common_color_bg">#FFEAEAEA</color>
-  <color name="common_color_brown">#FFA37A49</color>
-  <color name="common_color_light_grey">#555A5A5A</color>
-  <color name="common_color_red">#FFF60014</color>
-  <color name="common_color_dark_red">#FFD10414</color>
-  <color name="common_color_pink_light">#FFFC99A1</color>
-  <color name="common_color_grey">#ee5A5A5A</color>
   <color name="common_color_trans_grey">#995A5A5A</color>
-
-  <color name="common_color_grey_bg">#FFACACAC</color>
-  <color name="common_color_light_grey_bg">#FF949494</color>
-  <color name="common_color_orange">#FFF49027</color>
-  <color name="common_color_deep_orange">#d9740b</color>
-  <color name="common_color_pink">#FFF700F9</color>
-
-
-  <color name="teal">#00796B</color>
-  <color name="brown">#8D6E63</color>
-  <color name="colorAccent">#FF4081</color>
-  <color name="blue">#2196F3</color>
-  <color name="grey">#607D8B</color>
-  <color name="orange">#F57C00</color>
-  <color name="unselected">#33000000</color>
-
-  <color name="merchant_status">#FFEC8342</color>
-  <color name="merchant_light">#FFEF9A62</color>
-  <color name="merchant_deep">#FFB35438</color>
-  <color name="merchant_light2">#FFFAE4D4</color>
 </resources>

@@ -11,19 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ImageSingleActivity">
+        <activity android:name=".ImageActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".album.ImageChooseActivity"/>
-        <activity android:name=".permission.CheckPermissionActivity"
-                  android:theme="@style/Theme.Transparent"/>
-        <activity android:name=".album.PreviewAllSelectActivity"/>
-        <activity android:name=".album.PreviewSingleImageActivity"/>
-       <!-- <activity android:name=".ImageSingleActivity"/>-->
+        <activity android:name=".ImageSingleActivity"/>
         <!-- 图片拍照用-->
         <provider
             android:name="android.support.v4.content.FileProvider"

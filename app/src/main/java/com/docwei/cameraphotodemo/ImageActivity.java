@@ -19,14 +19,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.docwei.cameraphotodemo.album.ImageChooseActivity;
-import com.docwei.cameraphotodemo.album.PreviewSingleImageActivity;
-import com.docwei.cameraphotodemo.album.RectImageView;
-import com.docwei.cameraphotodemo.dialog.DialogPlus;
-import com.docwei.cameraphotodemo.permission.CheckPermission;
-import com.docwei.cameraphotodemo.permission.PermissionOptions;
-import com.docwei.cameraphotodemo.permission.PermissionResultListener;
-
+import com.docwei.imageupload_lib.TakePhotoVH;
+import com.docwei.imageupload_lib.album.ImageChooseActivity;
+import com.docwei.imageupload_lib.album.PreviewSingleImageActivity;
+import com.docwei.imageupload_lib.view.RectImageView;
+import com.docwei.imageupload_lib.dialog.DialogPlus;
+import com.docwei.imageupload_lib.permission.CheckPermission;
+import com.docwei.imageupload_lib.permission.PermissionOptions;
+import com.docwei.imageupload_lib.permission.PermissionResultListener;
 
 import java.io.File;
 import java.io.IOException;
