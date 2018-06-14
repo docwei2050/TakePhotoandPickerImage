@@ -10,8 +10,7 @@
 
 4.上传请自行实现
 
-涉及到recyclerView多选--ImageActivity
-                                                  单选的-----------ImageSingleActivity
+涉及到recyclerView多选--ImageActivity \r\n 单选的-----------ImageSingleActivity
 
 
 截图如下
