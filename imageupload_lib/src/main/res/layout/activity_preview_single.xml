@@ -8,7 +8,6 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:transitionName="preview">
-
     </com.github.chrisbanes.photoview.PhotoView>
 
     <ImageView

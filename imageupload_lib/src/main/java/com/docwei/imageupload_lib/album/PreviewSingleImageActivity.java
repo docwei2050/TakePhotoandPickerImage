@@ -40,8 +40,7 @@ public class PreviewSingleImageActivity extends AppCompatActivity {
         Intent    intent  =getIntent();
         if(intent!=null){
             String imagePath=intent.getStringExtra(IMAGE_PATH);
-            GlideApp.with(this).load(imagePath).placeholder(R.drawable.img_default)
-                    .error(R.drawable.img_fail).into(iv_show);
+            GlideApp.with(this).load(imagePath).into(iv_show);
         }
 
         ViewCompat.setTransitionName(iv_show, SHARED_ELEMENT_NAME);
