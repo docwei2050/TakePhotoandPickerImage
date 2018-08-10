@@ -9,7 +9,7 @@ import com.bumptech.glide.load.engine.cache.ExternalPreferredCacheDiskCacheFacto
 import com.bumptech.glide.module.AppGlideModule;
 
 @GlideModule
-public final class JiuhuluAppGlideModule extends AppGlideModule {
+public final class MyAppGlideModule extends AppGlideModule {
     @Override
     public void applyOptions(@NonNull Context context, @NonNull GlideBuilder builder) {
         int diskCacheSizeBytes = 1024 * 1024 * 100; // 100 MB

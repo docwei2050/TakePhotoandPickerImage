@@ -2,7 +2,7 @@ package com.docwei.imageupload_lib.permission;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +11,9 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.util.Log;
+
+import com.docwei.imageupload_lib.BuildConfig;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -18,26 +21,30 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *
+ * Created by hupei on 2016/4/26.
  */
-class CheckPermissionManager {
-    private static final String TAG                     = "CheckPermissionManager";
-    private static final int    REQUEST_CODE_PERMISSION = 0x38;
-    private static final int    REQUEST_CODE_SETTING    = 0x39;
-    private Context                  mContext;
-    private Activity                 mActivity;
-    private CheckPermissionService   mService;
-    private PermissionOptions        mOptions;
-    private PermissionResultListener mCallback;
-    private final List<String> mDeniedPermissions   = new LinkedList<>();
-    private final Set<String>  mManifestPermissions = new HashSet<>(1);
+class AcpManager {
+    private static final String TAG = "AcpManager";
+    private static final int REQUEST_CODE_PERMISSION = 0x38;
+    private static final int REQUEST_CODE_SETTING = 0x39;
+    private Context mContext;
+    private Activity mActivity;
+    private AcpService mService;
+    private AcpOptions mOptions;
+    private AcpListener mCallback;
+    private final List<String> mDeniedPermissions = new LinkedList<>();
+    private final Set<String> mManifestPermissions = new HashSet<>(1);
+    private boolean isNotFoundAct =false;
 
-    CheckPermissionManager(Context context) {
+    AcpManager(Context context) {
         mContext = context;
-        mService = new CheckPermissionService();
+        mService = new AcpService();
         getManifestPermissions();
     }
 
+    /**
+     * 将清单文件下的权限加入mManifestPermissions集合
+     */
     private synchronized void getManifestPermissions() {
         PackageInfo packageInfo = null;
         try {
@@ -62,7 +69,7 @@ class CheckPermissionManager {
      * @param options
      * @param acpListener
      */
-    synchronized void request(PermissionOptions options, PermissionResultListener acpListener) {
+    synchronized void request(AcpOptions options, AcpListener acpListener) {
         mCallback = acpListener;
         mOptions = options;
         checkSelfPermission();
@@ -70,31 +77,34 @@ class CheckPermissionManager {
 
     /**
      * 检查权限
+     *
      */
     private synchronized void checkSelfPermission() {
+        //6.0以下自动就获取了权限
         mDeniedPermissions.clear();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            //Log.i(TAG, "Build.VERSION.SDK_INT < Build.VERSION_CODES.M");
             if (mCallback != null)
                 mCallback.onGranted();
             onDestroy();
             return;
         }
+        //
         String[] permissions = mOptions.getPermissions();
         for (String permission : permissions) {
             //检查申请的权限是否在 AndroidManifest.xml 中
             if (mManifestPermissions.contains(permission)) {
                 int checkSelfPermission = mService.checkSelfPermission(mContext, permission);
-                //Log.i(TAG, "checkSelfPermission = " + checkSelfPermission);
+                if(BuildConfig.DEBUG) {
+                    Log.i(TAG, "checkSelfPermission = " + checkSelfPermission);
+                }
                 //如果是拒绝状态则装入拒绝集合中
                 if (checkSelfPermission == PackageManager.PERMISSION_DENIED) {
-                    mDeniedPermissions.add(permission);
+                     mDeniedPermissions.add(permission);
                 }
             }
         }
         //检查如果没有一个拒绝响应 onGranted 回调
         if (mDeniedPermissions.isEmpty()) {
-            //Log.i(TAG, "mDeniedPermissions.isEmpty()");
             if (mCallback != null)
                 mCallback.onGranted();
             onDestroy();
@@ -107,10 +117,9 @@ class CheckPermissionManager {
      * 启动处理权限过程的 Activity
      */
     private synchronized void startAcpActivity() {
-        Intent intent = new Intent(mContext, CheckPermissionActivity.class);
+        Intent intent = new Intent(mContext, AcpActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
-
     }
 
     /**
@@ -125,7 +134,9 @@ class CheckPermissionManager {
         for (String permission : mDeniedPermissions) {
             rationale = rationale || mService.shouldShowRequestPermissionRationale(mActivity, permission);
         }
-        //Log.i(TAG, "rationale = " + rationale);
+        if(BuildConfig.DEBUG) {
+            Log.i(TAG, "rationale = " + rationale);
+        }
         String[] permissions = mDeniedPermissions.toArray(new String[mDeniedPermissions.size()]);
         if (rationale) showRationalDialog(permissions);
         else requestPermissions(permissions);
@@ -137,15 +148,18 @@ class CheckPermissionManager {
      * @param permissions
      */
     private synchronized void showRationalDialog(final String[] permissions) {
-        new AlertDialog.Builder(mActivity)
+        AlertDialog alertDialog = new AlertDialog.Builder(mActivity)
                 .setMessage(mOptions.getRationalMessage())
                 .setPositiveButton(mOptions.getRationalBtnText(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
                         requestPermissions(permissions);
                     }
-                }).show();
-
+                }).create();
+        alertDialog.setCancelable(mOptions.isDialogCancelable());
+        alertDialog.setCanceledOnTouchOutside(mOptions.isDialogCanceledOnTouchOutside());
+        alertDialog.show();
     }
 
     /**
@@ -191,12 +205,13 @@ class CheckPermissionManager {
      * @param permissions
      */
     private synchronized void showDeniedDialog(final List<String> permissions) {
-        new AlertDialog.Builder(mActivity)
+        AlertDialog alertDialog = new AlertDialog.Builder(mActivity)
                 .setMessage(mOptions.getDeniedMessage())
-                .setCancelable(false)
                 .setNegativeButton(mOptions.getDeniedCloseBtn(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+
                         if (mCallback != null)
                             mCallback.onDenied(permissions);
                         onDestroy();
@@ -205,13 +220,18 @@ class CheckPermissionManager {
                 .setPositiveButton(mOptions.getDeniedSettingBtn(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        // 进入到设置页面
                         startSetting();
                     }
-                }).show();
+                }).create();
+        alertDialog.setCancelable(mOptions.isDialogCancelable());
+        alertDialog.setCanceledOnTouchOutside(mOptions.isDialogCanceledOnTouchOutside());
+        alertDialog.show();
     }
 
     /**
-     * 摧毁本库的 CheckPermissionActivity
+     * 摧毁本库的 AcpActivity
      */
     private void onDestroy() {
         if (mActivity != null) {
@@ -220,32 +240,33 @@ class CheckPermissionManager {
         }
         mCallback = null;
     }
-
+    private static final String MARK = Build.MANUFACTURER.toLowerCase();
     /**
      * 跳转到设置界面
      */
     private void startSetting() {
-        if (MiuiOs.isMIUI()) {
-            Intent intent = MiuiOs.getSettingIntent(mActivity);
-            if (MiuiOs.isIntentAvailable(mActivity, intent)) {
-                mActivity.startActivityForResult(intent, REQUEST_CODE_SETTING);
-                return;
-            }
+        if(mActivity==null){
+            return;
+        }
+        Intent intent;
+        if (MARK.contains("huawei")) {
+            intent = huaweiApi(mActivity);
+        } else if (MARK.contains("xiaomi")) {
+            intent = xiaomiApi(mActivity);
+        } else if (MARK.contains("oppo")) {
+            intent = oppoApi(mActivity);
+        } else if (MARK.contains("vivo")) {
+            intent = vivoApi(mActivity);
+        } else if (MARK.contains("meizu")) {
+            intent = meizuApi(mActivity);
+        } else {
+            intent = defaultApi(mActivity);
         }
         try {
-            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    .setData(Uri.parse("package:" + mActivity.getPackageName()));
             mActivity.startActivityForResult(intent, REQUEST_CODE_SETTING);
-        } catch (ActivityNotFoundException e) {
-            e.printStackTrace();
-            try {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
-                mActivity.startActivityForResult(intent, REQUEST_CODE_SETTING);
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
+        } catch (Exception e) {
+            isNotFoundAct =true;//可能是找不到对应的activity而报错，这里置为true
         }
-
     }
 
     /**
@@ -261,6 +282,73 @@ class CheckPermissionManager {
             onDestroy();
             return;
         }
-        checkSelfPermission();
+        if(!isNotFoundAct) {
+            checkSelfPermission();
+        }else{
+            //因为跳转页面找不到act，所以重新走默认的api
+            isNotFoundAct =false;
+            try {
+                Intent intent = defaultApi(mActivity);
+                mActivity.startActivityForResult(intent, REQUEST_CODE_SETTING);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+
+
+    private static Intent defaultApi(Context context) {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.setData(Uri.fromParts("package", context.getPackageName(), null));
+        return intent;
+    }
+
+    private static Intent huaweiApi(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return defaultApi(context);
+        }
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.permissionmanager.ui.MainActivity"));
+        return intent;
+    }
+
+    private static Intent xiaomiApi(Context context) {
+        Intent intent = new Intent("miui.intent.action.APP_PERM_EDITOR");
+        intent.putExtra("extra_pkgname", context.getPackageName());
+        return intent;
+    }
+
+    private static Intent vivoApi(Context context) {
+        Intent intent = new Intent();
+        intent.putExtra("packagename", context.getPackageName());
+        intent.setComponent(new ComponentName("com.vivo.permissionmanager", "com.vivo.permissionmanager.activity.SoftPermissionDetailActivity"));
+        if(hasActivity(context, intent)) return intent;
+
+        intent.setComponent(new ComponentName("com.iqoo.secure", "com.iqoo.secure.safeguard.SoftPermissionDetailActivity"));
+        return intent;
+    }
+
+    private static Intent oppoApi(Context context) {
+        Intent intent = new Intent();
+        intent.putExtra("packageName", context.getPackageName());
+        intent.setComponent(new ComponentName("com.color.safecenter", "com.color.safecenter.permission.PermissionManagerActivity"));
+        return intent;
+    }
+
+    private static Intent meizuApi(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return defaultApi(context);
+        }
+        Intent intent = new Intent("com.meizu.safe.security.SHOW_APPSEC");
+        intent.putExtra("packageName", context.getPackageName());
+        intent.setComponent(new ComponentName("com.meizu.safe", "com.meizu.safe.security.AppSecActivity"));
+        return intent;
+    }
+
+    private static boolean hasActivity(Context context, Intent intent) {
+        PackageManager packageManager = context.getPackageManager();
+        return packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() > 0;
     }
 }

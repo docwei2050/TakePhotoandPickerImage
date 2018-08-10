@@ -10,14 +10,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
 
 /**
- * .
+ * Created by hupei on 2016/4/26.
  */
-class CheckPermissionService {
-    private static final String TAG = "CheckPermissionService";
+class AcpService {
+    private static final String TAG = "AcpService";
 
     /**
-     * 检查权限授权状态
-     *
+     * 检查权限授权状态  注意区分targetSdkVersion<23和>=
      * @param context
      * @param permission
      * @return
@@ -29,7 +28,6 @@ class CheckPermissionService {
             int targetSdkVersion = info.applicationInfo.targetSdkVersion;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (targetSdkVersion >= Build.VERSION_CODES.M) {
-                   // Log.i(TAG, "targetSdkVersion >= Build.VERSION_CODES.M");
                     return ContextCompat.checkSelfPermission(context, permission);
                 } else {
                     return PermissionChecker.checkSelfPermission(context, permission);
@@ -60,8 +58,6 @@ class CheckPermissionService {
      * @return
      */
     boolean shouldShowRequestPermissionRationale(Activity activity, String permission) {
-        boolean shouldShowRational = ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
-        //Log.i(TAG, "shouldShowRational = " + shouldShowRational);
-        return shouldShowRational;
+        return ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
     }
 }

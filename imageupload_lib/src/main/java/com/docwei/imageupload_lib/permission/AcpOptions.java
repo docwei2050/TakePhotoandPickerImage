@@ -1,23 +1,27 @@
 package com.docwei.imageupload_lib.permission;
 
 /**
- *
+ * Created by hupei on 2016/4/26.
  */
-public final class PermissionOptions {
-    private String   mRationalMessage;
-    private String   mDeniedMessage;
-    private String   mDeniedCloseBtn;
-    private String   mDeniedSettingBtn;
-    private String   mRationalBtn;
+public final class AcpOptions {
+    private String mRationalMessage;
+    private String mDeniedMessage;
+    private String mDeniedCloseBtn;
+    private String mDeniedSettingBtn;
+    private String mRationalBtn;
     private String[] mPermissions;
+    private boolean mDialogCancelable;
+    private boolean mDialogCanceledOnTouchOutside;
 
-    private PermissionOptions(Builder builder) {
+    private AcpOptions(Builder builder) {
         mRationalMessage = builder.mRationalMessage;
         mDeniedMessage = builder.mDeniedMessage;
         mDeniedCloseBtn = builder.mDeniedCloseBtn;
         mDeniedSettingBtn = builder.mDeniedSettingBtn;
         mRationalBtn = builder.mRationalBtn;
-        this.mPermissions = builder.mPermissions;
+        mPermissions = builder.mPermissions;
+        mDialogCancelable = builder.dialogCancelable;
+        mDialogCanceledOnTouchOutside = builder.dialogCanceledOnTouchOutside;
     }
 
     public String getRationalMessage() {
@@ -44,18 +48,31 @@ public final class PermissionOptions {
         return mPermissions;
     }
 
+    public boolean isDialogCancelable() {
+        return mDialogCancelable;
+    }
+
+    public boolean isDialogCanceledOnTouchOutside() {
+        return mDialogCanceledOnTouchOutside;
+    }
+
     public static class Builder {
-        private static final String DEF_RATIONAL_MESSAGE         = "此功能需要您授权，否则将不能正常使用";
-        private static final String DEF_DENIED_MESSAGE           = "您拒绝权限申请，此功能将不能正常使用，您可以去设置页面重新授权";
-        private static final String DEF_DENIED_CLOSE_BTN_TEXT    = "关闭";
+        // 解释性对话框
+        private static final String DEF_RATIONAL_MESSAGE = "此功能需要您授权，否则将不能正常使用";
+        //进入设置页面的对话框
+        private static final String DEF_DENIED_MESSAGE = "您拒绝权限申请，此功能将不能正常使用，您可以去设置页面重新授权";
+
+        private static final String DEF_DENIED_CLOSE_BTN_TEXT = "关闭";
         private static final String DEF_DENIED_SETTINGS_BTN_TEXT = "设置权限";
-        private static final String DEF_RATIONAL_BTN_TEXT        = "我知道了";
-        private              String mRationalMessage             = DEF_RATIONAL_MESSAGE;
-        private              String mDeniedMessage               = DEF_DENIED_MESSAGE;
-        private              String mDeniedCloseBtn              = DEF_DENIED_CLOSE_BTN_TEXT;
-        private              String mDeniedSettingBtn            = DEF_DENIED_SETTINGS_BTN_TEXT;
-        private              String mRationalBtn                 = DEF_RATIONAL_BTN_TEXT;
+        private static final String DEF_RATIONAL_BTN_TEXT = "我知道了";
+        private String mRationalMessage = DEF_RATIONAL_MESSAGE;
+        private String mDeniedMessage = DEF_DENIED_MESSAGE;
+        private String mDeniedCloseBtn = DEF_DENIED_CLOSE_BTN_TEXT;
+        private String mDeniedSettingBtn = DEF_DENIED_SETTINGS_BTN_TEXT;
+        private String mRationalBtn = DEF_RATIONAL_BTN_TEXT;
         private String[] mPermissions;
+        private boolean dialogCancelable = false;
+        private boolean dialogCanceledOnTouchOutside = false;
 
         /**
          * 申请权限理由框提示语
@@ -123,11 +140,21 @@ public final class PermissionOptions {
             return this;
         }
 
-        public PermissionOptions build() {
+        public Builder setDialogCancelable(boolean dialogCancelable) {
+            this.dialogCancelable = dialogCancelable;
+            return this;
+        }
+
+        public Builder setDialogCanceledOnTouchOutside(boolean dialogCanceledOnTouchOutside) {
+            this.dialogCanceledOnTouchOutside = dialogCanceledOnTouchOutside;
+            return this;
+        }
+
+        public AcpOptions build() {
             if (this.mPermissions == null || this.mPermissions.length == 0) {
                 throw new IllegalArgumentException("mPermissions no found...");
             }
-            return new PermissionOptions(this);
+            return new AcpOptions(this);
         }
     }
 }

@@ -3,9 +3,9 @@ package com.docwei.imageupload_lib.permission;
 import java.util.List;
 
 /**
- *
+ * Created by hupei on 2016/4/26.
  */
-public interface PermissionResultListener {
+public interface AcpListener {
     /**
      *同意
      */

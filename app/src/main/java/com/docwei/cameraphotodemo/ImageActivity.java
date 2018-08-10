@@ -22,11 +22,11 @@ import android.widget.Toast;
 import com.docwei.imageupload_lib.TakePhotoVH;
 import com.docwei.imageupload_lib.album.ImageChooseActivity;
 import com.docwei.imageupload_lib.album.PreviewSingleImageActivity;
+import com.docwei.imageupload_lib.permission.Acp;
+import com.docwei.imageupload_lib.permission.AcpListener;
+import com.docwei.imageupload_lib.permission.AcpOptions;
 import com.docwei.imageupload_lib.view.RectImageView;
 import com.docwei.imageupload_lib.dialog.DialogPlus;
-import com.docwei.imageupload_lib.permission.CheckPermission;
-import com.docwei.imageupload_lib.permission.PermissionOptions;
-import com.docwei.imageupload_lib.permission.PermissionResultListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -178,12 +178,12 @@ public class ImageActivity extends AppCompatActivity {
 
             @Override
             public void selectAlbum() {
-                CheckPermission.getInstance(ImageActivity.this)
-                               .request(new PermissionOptions.Builder().setRationalMessage(
+                Acp.getInstance(ImageActivity.this)
+                               .request(new AcpOptions.Builder().setRationalMessage(
                                        "要允许酒葫芦访问您设备上的图片、媒体内容吗？")
                                                                        .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                                                                        .build(),
-                                        new PermissionResultListener() {
+                                        new AcpListener() {
                                             @Override
                                             public void onGranted() {
                                                 //使用系统自带的图片选择功能
