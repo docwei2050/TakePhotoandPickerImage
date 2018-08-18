@@ -3,11 +3,13 @@
     <string name="image_select_pic_number_at_most">您最多只能选择%d张图片</string>
     <string name="image_preview">预览</string>
     <string name="image_complete_number">完成(%1$d/%2$d)</string>
+    <string name="image_order">%1$d/%2$d</string>
     <string name="image_preview_number">预览(%1$d)</string>
     <string name="image_zero_number">0张</string>
     <string name="select_from_pic">从相册选择</string>
     <string name="select_from_camera">拍摄</string>
     <string name="cancel">取消</string>
+    <string name="select">选择</string>
     <string name="gallary">相册</string>
     <string name="all_pic">所有图片</string>
 </resources>

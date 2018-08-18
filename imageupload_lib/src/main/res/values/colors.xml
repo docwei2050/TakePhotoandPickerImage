@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="dialogplus_card_shadow">#D4D4D4</color>
     <color name="dialogplus_black_overlay">#60000000</color>
+    <color name="color_status_bar">#aa000000</color>
     <color name="common_color_light_grey_bg">#FF949494</color>
 
     <color name="common_color_title_green">#FF35A452</color>
