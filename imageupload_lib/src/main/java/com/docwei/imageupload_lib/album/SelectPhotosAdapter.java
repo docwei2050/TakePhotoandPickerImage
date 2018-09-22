@@ -58,6 +58,11 @@ public class SelectPhotosAdapter extends RecyclerView.Adapter<SelectPhotosAdapte
     }
      public void notifyDataChange(int lastPosition,int currentPosition){
         if(lastPosition==-1){
+            for(AlbumInfo info:mAlbums){
+                info.setSelect(false);
+            }
+            mAlbums.get(currentPosition).setSelect(true);
+            notifyItemChanged(currentPosition);
             return;
         }
         if(lastPosition!=currentPosition) {
