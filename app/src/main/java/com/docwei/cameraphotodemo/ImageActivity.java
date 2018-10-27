@@ -1,16 +1,11 @@
 package com.docwei.cameraphotodemo;
 
-import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -19,22 +14,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.docwei.imageupload_lib.TakePhotoVH;
-import com.docwei.imageupload_lib.album.ImageChooseActivity;
-import com.docwei.imageupload_lib.album.PreviewSingleImageActivity;
-import com.docwei.imageupload_lib.permission.Acp;
-import com.docwei.imageupload_lib.permission.AcpListener;
-import com.docwei.imageupload_lib.permission.AcpOptions;
+import com.docwei.imageupload_lib.GlideApp;
+import com.docwei.imageupload_lib.album.type.UsageTypeConstant;
+import com.docwei.imageupload_lib.album.ui.ImageSelectProxyActivity;
+import com.docwei.imageupload_lib.album.ui.PreviewSingleImageActivity;
+import com.docwei.imageupload_lib.constant.ImageConstant;
 import com.docwei.imageupload_lib.view.RectImageView;
-import com.docwei.imageupload_lib.dialog.DialogPlus;
 
 import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -46,31 +35,27 @@ import top.zibin.luban.Luban;
 
 public class ImageActivity extends AppCompatActivity {
 
-    private TextView    mTv_show;
-    private ViewGroup   mDecorView;
-    private FrameLayout mBaseContainer;
-    private FrameLayout mContent_container;
-    private View        mContentView;
-    private FrameLayout mContent_container1;
-    private Uri         mImageUri;
 
-    private int TAKE_PHOTO   = 100;
-    private int SELECT_ALBUM = 101;
+
+
     private ImageView mIv;
     private RecyclerView mRv_image;
     private ImageSelectedAdapter mImagesAdapter;
     private TextView mTv_upload;
+    private ImageView mIv_logo;
+
+    private String mType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mTv_show = findViewById(R.id.tv_show);
         mRv_image = findViewById(R.id.recycler_img);
         mTv_upload = findViewById(R.id.tv_upload);
+        mIv_logo = findViewById(R.id.iv_logo);
+
         mRv_image.setLayoutManager(new GridLayoutManager(this,4));
         mImagesAdapter = new ImageSelectedAdapter(this,9);
-
         mRv_image.setAdapter(mImagesAdapter);
         initClick8();
 
@@ -86,7 +71,9 @@ public class ImageActivity extends AppCompatActivity {
 
             @Override
             public void addImages(int count) {
-                show(count);
+                mType=UsageTypeConstant.OTHER;
+                // 添加图片，每次添加9张
+                ImageSelectProxyActivity.selectImage(ImageActivity.this,UsageTypeConstant.OTHER,9);
             }
         });
         mTv_upload.setOnClickListener(new View.OnClickListener() {
@@ -124,7 +111,14 @@ public class ImageActivity extends AppCompatActivity {
 
 
             }});
-
+      mIv_logo.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              mType=UsageTypeConstant.HEAD_PORTRAIT;
+              // 更换头像 ，每次只有一张
+              ImageSelectProxyActivity.selectImage(ImageActivity.this,UsageTypeConstant.HEAD_PORTRAIT,1);
+          }
+      });
     }
     private String getPath() {
         String path = getExternalCacheDir() + "/images";
@@ -135,99 +129,25 @@ public class ImageActivity extends AppCompatActivity {
         return path;
     }
 
-    private void show(final int count) {
-        TakePhotoVH viewHolder = new TakePhotoVH(this);
-
-        DialogPlus dialog = DialogPlus.newDialog(this)
-                                      .setContentHolder(viewHolder)
-                                      .setCancelable(true)
-                                      .setGravity(Gravity.BOTTOM)
-                                      .create();
-        dialog.show();
-        viewHolder.setCameraAndPhotoListener(new TakePhotoVH.ICameraAndPhotoListener() {
-            @Override
-            public void takePhoto() {
-                //使用相机拍照显示图片，这里保存在该app的关联目录--缓存目录下，所以无需进行外置SD卡的读取权限
-                //注意：调用系统相册拍照无需使用相机权限
-                //但是由于4.4以前的系统访问关联目录--缓存目录需要sd卡权限，我们为了兼容老版本加上。。
-
-                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
-                                                        Locale.getDefault()).format(new Date());
-                String imageFileName = "JPEG_" + timeStamp + "_"+".jpg";
-                File   outputImage   = new File(getExternalCacheDir(), imageFileName);
-                try {
-                    if (outputImage.exists()) {
-                        outputImage.delete();
-                    }
-                    outputImage.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if (Build.VERSION.SDK_INT >= 24) {
-                    mImageUri = FileProvider.getUriForFile(ImageActivity.this,
-                                                           "com.docwei.cameraphotodemo.fileprovider",
-                                                           outputImage);
-                } else {
-                    mImageUri = Uri.fromFile(outputImage);
-                }
-                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-                startActivityForResult(intent, TAKE_PHOTO);
-
-            }
-
-            @Override
-            public void selectAlbum() {
-                Acp.getInstance(ImageActivity.this)
-                               .request(new AcpOptions.Builder().setRationalMessage(
-                                       "要允许酒葫芦访问您设备上的图片、媒体内容吗？")
-                                                                       .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                                                       .build(),
-                                        new AcpListener() {
-                                            @Override
-                                            public void onGranted() {
-                                                //使用系统自带的图片选择功能
-                                                //openAlbum();
-
-                                                //使用非系统的实现
-                                                ImageChooseActivity.startForResult(ImageActivity.this, count, SELECT_ALBUM);
-                                            }
-
-                                            @Override
-                                            public void onDenied(List<String> permissions) {
-                                                Toast.makeText(ImageActivity.this,
-                                                               "您拒绝访问图片的权限了，所以无法使用图片",
-                                                               Toast.LENGTH_SHORT)
-                                                     .show();
-                                            }
-
-                                        });
-            }
-        });
-    }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == TAKE_PHOTO) {
-            if (resultCode == RESULT_OK) {
-                try {
-                    mImagesAdapter.updateDataFromCamera(mImageUri.toString());
-                } catch (Exception e) {
-                    e.printStackTrace();
+        super.onActivityResult(requestCode, resultCode, data);
+        if(RESULT_OK==resultCode){
+            if(requestCode==ImageConstant.REQUEST_CODE_IAMGES){
+                ArrayList<String> list= (ArrayList<String>) data.getSerializableExtra(ImageConstant.SELECTED_IAMGES);
+                    //场景一：评论等上传 这里不裁剪
+                if(mType.equals(UsageTypeConstant.OTHER)) {
+                    mImagesAdapter.updateDataFromAlbum(list);
                 }
-            }
-        } else if (requestCode == SELECT_ALBUM) {
-            if (resultCode == RESULT_OK) {
-                if(data!=null){
-                    ArrayList<String> list= (ArrayList<String>) data.getSerializableExtra("images");
-                    if(list!=null&& list.size()>0) {
-                        mImagesAdapter.updateDataFromAlbum(list);
+
+
+                if(mType.equals(UsageTypeConstant.HEAD_PORTRAIT)) {
+                    //场景二：头像等上传 有裁剪操作
+                    if (list != null && list.size() > 0) {
+                        GlideApp.with(this).load(list.get(0)).circleCrop().into(mIv_logo);
                     }
                 }
             }
         }
     }
-
-
 }

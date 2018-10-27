@@ -1,4 +1,4 @@
-package com.docwei.imageupload_lib.album;
+package com.docwei.imageupload_lib.album.bean;
 
 /**
  * 选择相册的javabean

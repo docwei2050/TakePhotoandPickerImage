@@ -1,25 +1,29 @@
-package com.docwei.imageupload_lib;
+package com.docwei.imageupload_lib.album;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.docwei.imageupload_lib.R;
 import com.docwei.imageupload_lib.dialog.DialogPlus;
 import com.docwei.imageupload_lib.dialog.Holder;
 
 
 /**
  * Created by wk on 2018/4/13.
+ * 用户点击选择弹窗，是拍照、相册、取消
+ * 跟我们的Activity是同生命周期的
  */
 
 public class TakePhotoVH implements Holder {
-    private Context mContext;
+    private Activity mContext;
 
     private View mContentContainer;
 
 
-    public TakePhotoVH(Context context) {
+    public TakePhotoVH(Activity context) {
         mContext = context;
     }
 
@@ -47,6 +51,7 @@ public class TakePhotoVH implements Holder {
             @Override
             public void onClick(View v) {
                 dialogPlus.dismiss();
+                mContext.finish();
             }
         });
         tv_photo.setOnClickListener(new View.OnClickListener() {

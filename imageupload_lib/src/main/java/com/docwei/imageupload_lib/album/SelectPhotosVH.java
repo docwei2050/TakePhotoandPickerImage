@@ -9,6 +9,7 @@ import android.view.View;
 
 
 import com.docwei.imageupload_lib.R;
+import com.docwei.imageupload_lib.album.bean.AlbumInfo;
 import com.docwei.imageupload_lib.dialog.DialogPlus;
 import com.docwei.imageupload_lib.dialog.Holder;
 
@@ -17,6 +18,7 @@ import java.util.List;
 
 /**
  * Created by wk on 2018/4/13.
+ * 所有图片目录弹窗
  */
 
 public class SelectPhotosVH implements Holder {

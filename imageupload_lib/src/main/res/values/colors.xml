@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="dialogplus_card_shadow">#D4D4D4</color>
+    <color name="text_bg_light">#33000000</color>
     <color name="dialogplus_black_overlay">#60000000</color>
     <color name="color_status_bar">#aa000000</color>
     <color name="common_color_light_grey_bg">#FF949494</color>
@@ -13,6 +14,9 @@
 
     <color name="image_bg">#FFE3E3E3</color>
     <color name="image_white">#ffffff</color>
-
+    <color name="text_blue">#990000FF</color>
+    <color name="text_light_blue">#880000FF</color>
     <color name="common_color_trans_grey">#995A5A5A</color>
+    <color name="transparent_black">#a8000000</color>
+    <color name="bg_text">#aa000000</color>
 </resources>

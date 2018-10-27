@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.docwei.imageupload_lib.GlideApp;
 import com.docwei.imageupload_lib.R;
+import com.docwei.imageupload_lib.album.bean.AlbumInfo;
 
 import java.util.List;
 

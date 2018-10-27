@@ -3,44 +3,56 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffffff"
     android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/shape_bg_takephoto"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/select_photo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
+            android:gravity="center"
+            android:padding="18dp"
+            android:textStyle="bold"
+            android:text="@string/tip_form_pic_takephoto"
+            android:textColor="@color/text_light_blue"
+            android:textSize="16sp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/dialogplus_card_shadow"/>
+        <TextView
+            android:id="@+id/select_camera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
+            android:gravity="center"
+            android:padding="18dp"
+            android:textStyle="bold"
+            android:text="@string/tip_takephoto"
+            android:textColor="@color/text_light_blue"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
     <TextView
-        android:id="@+id/select_photo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:selectableItemBackground"
-        android:gravity="center"
-        android:padding="15dp"
-        android:text="从相册选择"
-        android:textColor="#000000"
-        android:textSize="15sp"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#22000000"/>
-    <TextView
-        android:id="@+id/select_camera"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:selectableItemBackground"
-        android:gravity="center"
-        android:padding="15dp"
-        android:text="拍摄"
-        android:textColor="#000000"
-        android:textSize="15sp"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#22000000"/>
-    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
         android:id="@+id/select_cancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?android:selectableItemBackground"
         android:gravity="center"
-        android:padding="15dp"
-        android:text="取消"
-        android:textColor="#000000"
-        android:textSize="15sp"/>
+        android:padding="18dp"
+        android:textStyle="bold"
+        android:text="@string/tip_cancel_takephoto"
+        android:background="@drawable/shape_bg_takephoto"
+        android:textColor="@color/text_blue"
+        android:textSize="16sp"/>
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.docwei.imageupload_lib.album;
+package com.docwei.imageupload_lib.album.ui;
 
 import android.app.Activity;
 import android.content.Intent;

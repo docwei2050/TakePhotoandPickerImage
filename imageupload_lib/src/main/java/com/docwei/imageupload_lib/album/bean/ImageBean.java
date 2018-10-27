@@ -1,4 +1,4 @@
-package com.docwei.imageupload_lib.album;
+package com.docwei.imageupload_lib.album.bean;
 
 /**
  * Created by wk on 2018/4/29.

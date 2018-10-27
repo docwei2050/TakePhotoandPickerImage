@@ -12,12 +12,12 @@
 
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="10dp"
             android:background="@drawable/bg_transparent_round"
-            android:padding="8dp"
+            android:padding="10dp"
             android:scaleType="fitCenter"
             android:src="@mipmap/common_back" />
 
@@ -34,6 +34,7 @@
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:id="@+id/fr_toolbar"
             android:layout_gravity="center_vertical|end"
             android:layout_marginRight="10dp">
 

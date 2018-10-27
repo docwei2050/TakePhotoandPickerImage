@@ -1,43 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:orientation="vertical">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="拍照or选择照片"
-        android:textSize="15sp"
-        android:textColor="#ffffff"
-        android:padding="15dp"
         android:id="@+id/tv_show"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="#1abc9c"
-        />
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_img"
-            android:overScrollMode="never"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        android:padding="15dp"
+        android:text="场景一：评论等上传图片"
+        android:textColor="#ffffff"
+        android:textSize="15sp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:overScrollMode="never" />
+
+    <TextView
+        android:id="@+id/tv_upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:background="#abc"
+        android:text="压缩+上传"
+        android:textColor="#ffffff"
+        android:textSize="15sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="压缩+上传"
-        android:gravity="center"
-        android:layout_marginTop="30dp"
-        android:textSize="15sp"
-        android:textColor="#ffffff"
-        android:padding="15dp"
-        android:id="@+id/tv_upload"
+        android:layout_marginTop="10dp"
         android:background="#f1c40f"
-       />
+        android:padding="15dp"
+        android:text="场景二：头像上传" />
 
+    <ImageView
+        android:id="@+id/iv_logo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/person_user_icon" />
 </LinearLayout>

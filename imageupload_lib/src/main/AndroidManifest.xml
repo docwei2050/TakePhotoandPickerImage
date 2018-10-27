@@ -5,12 +5,34 @@
     <application
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".album.ImageChooseActivity"/>
-        <activity android:name=".album.PreviewAllSelectActivity"/>
-        <activity android:name=".album.PreviewSingleImageActivity"/>
-       <activity android:name=".permission.AcpActivity"
-           android:theme="@style/Theme.Transparent"/>
-
+        <activity android:name=".album.ui.ImageChooseActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".album.ui.PreviewAllSelectActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".album.ui.PreviewSingleImageActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".permission.AcpActivity"
+            android:theme="@style/Theme.Transparent"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".album.ui.ImageSelectProxyActivity"
+            android:theme="@style/Transparent"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".album.ui.CropImageActivity"
+            android:screenOrientation="portrait"/>
+        <!-- 图片拍照用-->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.docwei.imageupload_lib.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
     </application>
 
 </manifest>
