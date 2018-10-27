@@ -10,7 +10,6 @@
 
 4.上传请自行实现
 
-<br>涉及到recyclerView多选--ImageActivity</br>  单选的-----------ImageSingleActivity
 
 
 截图如下
@@ -18,3 +17,7 @@
 <img src="https://github.com/docwei2050/TakePhotoandPickerImage/blob/master/screenshot/Screenshot_20180501-111017.jpg" width=270 height=480 />  <img src="https://github.com/docwei2050/TakePhotoandPickerImage/blob/master/screenshot/Screenshot_20180501-112433.jpg" width=270 height=480 />
 
 <img src="https://github.com/docwei2050/TakePhotoandPickerImage/blob/master/screenshot/Screenshot_20180501-111029.jpg" width=270 height=480 />  <img src="https://github.com/docwei2050/TakePhotoandPickerImage/blob/master/screenshot/Screenshot_20180501-111050.jpg" width=270 height=480 />
+
+
+ps：裁剪库参考https://github.com/jeasonlzy/ImagePicker
+
