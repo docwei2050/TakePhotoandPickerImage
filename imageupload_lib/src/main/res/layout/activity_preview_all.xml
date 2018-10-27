@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -13,28 +12,29 @@
         <ImageView
             android:id="@+id/iv_back"
             android:layout_width="40dp"
-            android:layout_centerVertical="true"
             android:layout_height="40dp"
+            android:layout_centerVertical="true"
             android:layout_gravity="start|center_vertical"
             android:layout_marginLeft="10dp"
             android:background="@drawable/bg_transparent_round"
             android:padding="10dp"
             android:scaleType="fitCenter"
             android:src="@mipmap/common_back" />
+
         <TextView
+            android:id="@+id/tv_order"
             android:layout_width="wrap_content"
-            android:textColor="#ffffff"
-            android:textSize="15sp"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/iv_back"
-            android:id="@+id/tv_order"
-            android:layout_height="wrap_content"/>
+            android:textColor="#ffffff"
+            android:textSize="15sp" />
 
         <FrameLayout
-            android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
             android:layout_gravity="center_vertical|end"
             android:layout_marginRight="10dp">
 
@@ -53,35 +53,37 @@
             <View
                 android:id="@+id/tv_overlay"
                 android:layout_width="100dp"
-                android:visibility="gone"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical|end"
-                android:background="@color/common_color_trans_grey" />
+                android:background="@color/common_color_trans_grey"
+                android:visibility="gone" />
         </FrameLayout>
 
     </RelativeLayout>
+
     <com.docwei.imageupload_lib.album.HackyViewPager
         android:id="@+id/view_pager"
-        android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
-    </com.docwei.imageupload_lib.album.HackyViewPager>
+        android:layout_weight="1"
+        android:overScrollMode="never"></com.docwei.imageupload_lib.album.HackyViewPager>
+
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:gravity="right"
         android:background="#aa000000"
-        android:layout_height="wrap_content">
+        android:gravity="right">
+
         <CheckBox
             android:id="@+id/cb_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:enabled="true"
-            android:checked="true"
-            android:padding="10dp"
             android:button="@drawable/cb_image_select"
+            android:checked="true"
+            android:enabled="true"
+            android:padding="10dp"
             android:text="@string/select"
             android:textColor="#ffffff"
             android:textSize="15sp" />

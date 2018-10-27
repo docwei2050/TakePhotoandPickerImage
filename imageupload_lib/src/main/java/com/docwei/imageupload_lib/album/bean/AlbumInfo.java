@@ -3,7 +3,7 @@ package com.docwei.imageupload_lib.album.bean;
 /**
  * 选择相册的javabean
  */
-public class AlbumInfo  {
+public class AlbumInfo {
     private String albumName;
     private int photoCounts;
     private String firstPhoto;

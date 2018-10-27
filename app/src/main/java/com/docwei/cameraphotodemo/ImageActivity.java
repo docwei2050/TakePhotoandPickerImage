@@ -1,18 +1,14 @@
 package com.docwei.cameraphotodemo;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.docwei.imageupload_lib.GlideApp;
 import com.docwei.imageupload_lib.album.type.UsageTypeConstant;
@@ -36,8 +32,6 @@ import top.zibin.luban.Luban;
 public class ImageActivity extends AppCompatActivity {
 
 
-
-
     private ImageView mIv;
     private RecyclerView mRv_image;
     private ImageSelectedAdapter mImagesAdapter;
@@ -54,8 +48,8 @@ public class ImageActivity extends AppCompatActivity {
         mTv_upload = findViewById(R.id.tv_upload);
         mIv_logo = findViewById(R.id.iv_logo);
 
-        mRv_image.setLayoutManager(new GridLayoutManager(this,4));
-        mImagesAdapter = new ImageSelectedAdapter(this,9);
+        mRv_image.setLayoutManager(new GridLayoutManager(this, 4));
+        mImagesAdapter = new ImageSelectedAdapter(this, 9);
         mRv_image.setAdapter(mImagesAdapter);
         initClick8();
 
@@ -71,9 +65,9 @@ public class ImageActivity extends AppCompatActivity {
 
             @Override
             public void addImages(int count) {
-                mType=UsageTypeConstant.OTHER;
+                mType = UsageTypeConstant.OTHER;
                 // 添加图片，每次添加9张
-                ImageSelectProxyActivity.selectImage(ImageActivity.this,UsageTypeConstant.OTHER,9);
+                ImageSelectProxyActivity.selectImage(ImageActivity.this, UsageTypeConstant.OTHER, 9);
             }
         });
         mTv_upload.setOnClickListener(new View.OnClickListener() {
@@ -89,37 +83,37 @@ public class ImageActivity extends AppCompatActivity {
                         .map(new Function<List<String>, List<File>>() {
                             @Override
                             public List<File> apply(@NonNull List<String> list)
-                                    throws Exception
-                            {
+                                    throws Exception {
 
                                 return Luban.with(ImageActivity.this)
-                                            .setTargetDir(getPath())
-                                            .load(list)
-                                            .get();
+                                        .setTargetDir(getPath())
+                                        .load(list)
+                                        .get();
                             }
                         })
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Consumer<List<File>>() {
                             @Override
                             public void accept(@NonNull List<File> list)
-                                    throws Exception
-                            {
+                                    throws Exception {
                                 //发射一个上传一个到七牛云
                                 Toast.makeText(ImageActivity.this, "压缩完成", Toast.LENGTH_SHORT).show();
                             }
                         });
 
 
-            }});
-      mIv_logo.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-              mType=UsageTypeConstant.HEAD_PORTRAIT;
-              // 更换头像 ，每次只有一张
-              ImageSelectProxyActivity.selectImage(ImageActivity.this,UsageTypeConstant.HEAD_PORTRAIT,1);
-          }
-      });
+            }
+        });
+        mIv_logo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mType = UsageTypeConstant.HEAD_PORTRAIT;
+                // 更换头像 ，每次只有一张
+                ImageSelectProxyActivity.selectImage(ImageActivity.this, UsageTypeConstant.HEAD_PORTRAIT, 1);
+            }
+        });
     }
+
     private String getPath() {
         String path = getExternalCacheDir() + "/images";
         File file = new File(path);
@@ -132,16 +126,16 @@ public class ImageActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(RESULT_OK==resultCode){
-            if(requestCode==ImageConstant.REQUEST_CODE_IAMGES){
-                ArrayList<String> list= (ArrayList<String>) data.getSerializableExtra(ImageConstant.SELECTED_IAMGES);
-                    //场景一：评论等上传 这里不裁剪
-                if(mType.equals(UsageTypeConstant.OTHER)) {
+        if (RESULT_OK == resultCode) {
+            if (requestCode == ImageConstant.REQUEST_CODE_IAMGES) {
+                ArrayList<String> list = (ArrayList<String>) data.getSerializableExtra(ImageConstant.SELECTED_IAMGES);
+                //场景一：评论等上传 这里不裁剪
+                if (mType.equals(UsageTypeConstant.OTHER)) {
                     mImagesAdapter.updateDataFromAlbum(list);
                 }
 
 
-                if(mType.equals(UsageTypeConstant.HEAD_PORTRAIT)) {
+                if (mType.equals(UsageTypeConstant.HEAD_PORTRAIT)) {
                     //场景二：头像等上传 有裁剪操作
                     if (list != null && list.size() > 0) {
                         GlideApp.with(this).load(list.get(0)).circleCrop().into(mIv_logo);

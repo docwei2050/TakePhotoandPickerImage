@@ -5,24 +5,27 @@
     <application
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".album.ui.ImageChooseActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".album.ui.PreviewAllSelectActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".album.ui.PreviewSingleImageActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".album.ui.ImageChooseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".album.ui.PreviewAllSelectActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".album.ui.PreviewSingleImageActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".permission.AcpActivity"
-            android:theme="@style/Theme.Transparent"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Transparent" />
         <activity
             android:name=".album.ui.ImageSelectProxyActivity"
-            android:theme="@style/Transparent"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent" />
         <activity
             android:name=".album.ui.CropImageActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 图片拍照用-->
         <provider
             android:name="android.support.v4.content.FileProvider"

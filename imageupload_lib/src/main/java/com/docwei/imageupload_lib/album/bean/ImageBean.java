@@ -3,10 +3,9 @@ package com.docwei.imageupload_lib.album.bean;
 /**
  * Created by wk on 2018/4/29.
  * 图片选择javabean
- *
  */
 
-public class ImageBean  {
+public class ImageBean {
     public String imagePath;
     public boolean isSelect;
 

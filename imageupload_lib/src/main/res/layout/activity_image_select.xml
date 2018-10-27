@@ -32,9 +32,9 @@
             android:textSize="18sp" />
 
         <FrameLayout
+            android:id="@+id/fr_toolbar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/fr_toolbar"
             android:layout_gravity="center_vertical|end"
             android:layout_marginRight="10dp">
 

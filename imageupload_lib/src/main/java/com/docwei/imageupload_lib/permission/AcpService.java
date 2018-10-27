@@ -17,6 +17,7 @@ class AcpService {
 
     /**
      * 检查权限授权状态  注意区分targetSdkVersion<23和>=
+     *
      * @param context
      * @param permission
      * @return

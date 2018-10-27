@@ -13,7 +13,6 @@ import android.graphics.Region;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -21,7 +20,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-
 
 import com.docwei.imageupload_lib.R;
 import com.docwei.imageupload_lib.utils.DensityUtil;
@@ -89,7 +87,7 @@ public class CropImageView extends AppCompatImageView {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(Color.WHITE);
-        mPaint.setStrokeWidth(DensityUtil.dip2px(getContext(),1));
+        mPaint.setStrokeWidth(DensityUtil.dip2px(getContext(), 1));
     }
 
     @Override
@@ -121,13 +119,13 @@ public class CropImageView extends AppCompatImageView {
         super.onSizeChanged(w, h, oldw, oldh);
         isInited = true;
 
-        int dimen_25=DensityUtil.dip2px(getContext(),25);
-        mFocusRect=new RectF();
-        mFocusRect.left=dimen_25;
-        mFocusRect.right=w-dimen_25;
-        mFocusRect.top=h*1.0f/2-w*1.0f/2+dimen_25;
-        mFocusRect.bottom=h*1.0f/2+w*1.0f/2-dimen_25;
-        mFocusWidth=  mFocusHeight=(int) (mFocusRect.right-mFocusRect.left);
+        int dimen_25 = DensityUtil.dip2px(getContext(), 25);
+        mFocusRect = new RectF();
+        mFocusRect.left = dimen_25;
+        mFocusRect.right = w - dimen_25;
+        mFocusRect.top = h * 1.0f / 2 - w * 1.0f / 2 + dimen_25;
+        mFocusRect.bottom = h * 1.0f / 2 + w * 1.0f / 2 - dimen_25;
+        mFocusWidth = mFocusHeight = (int) (mFocusRect.right - mFocusRect.left);
         initImage();
     }
 
@@ -151,7 +149,7 @@ public class CropImageView extends AppCompatImageView {
         float fitFocusScale = getScale(mImageWidth, mImageHeight, mFocusWidth, mFocusHeight);
         mMaxScale = fitFocusScale * MAX_SCALE;
         //图像中点为中心进行缩放
-        matrix.setScale(fitFocusScale,fitFocusScale);
+        matrix.setScale(fitFocusScale, fitFocusScale);
         float[] mImageMatrixValues = new float[9];
         matrix.getValues(mImageMatrixValues); //获取缩放后的mImageMatrix的值
         float transX = mFocusMidPoint.x - (mImageMatrixValues[2] + mImageWidth * mImageMatrixValues[0] / 2);  //X轴方向的位移
@@ -186,7 +184,7 @@ public class CropImageView extends AppCompatImageView {
         canvas.drawColor(getResources().getColor(R.color.transparent_black));
         canvas.restore();
         mPaint.setStyle(Paint.Style.STROKE);
-        canvas.drawRect(mFocusRect,mPaint);
+        canvas.drawRect(mFocusRect, mPaint);
     }
 
     @Override
@@ -339,8 +337,8 @@ public class CropImageView extends AppCompatImageView {
     }
 
     /**
-     * @param expectWidth     期望的宽度
-     * @param exceptHeight    期望的高度
+     * @param expectWidth  期望的宽度
+     * @param exceptHeight 期望的高度
      * @return 裁剪后的Bitmap
      */
     public Bitmap getCropBitmap(int expectWidth, int exceptHeight) {
@@ -417,9 +415,9 @@ public class CropImageView extends AppCompatImageView {
     }
 
     /**
-     * @param folder          希望保存的文件夹
-     * @param expectWidth     希望保存的图片宽度
-     * @param exceptHeight    希望保存的图片高度
+     * @param folder       希望保存的文件夹
+     * @param expectWidth  希望保存的图片宽度
+     * @param exceptHeight 希望保存的图片高度
      */
     public void saveBitmapToFile(File folder, int expectWidth, int exceptHeight) {
         if (mSaving) return;

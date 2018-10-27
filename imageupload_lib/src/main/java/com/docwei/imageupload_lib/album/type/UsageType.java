@@ -1,4 +1,5 @@
 package com.docwei.imageupload_lib.album.type;
+
 import android.support.annotation.StringDef;
 
 import java.lang.annotation.ElementType;
@@ -10,8 +11,8 @@ import static com.docwei.imageupload_lib.album.type.UsageTypeConstant.HEAD_PORTR
 import static com.docwei.imageupload_lib.album.type.UsageTypeConstant.OTHER;
 
 @StringDef({HEAD_PORTRAIT, OTHER})
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
-    public @interface UsageType {
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
+public @interface UsageType {
 
-    }
+}

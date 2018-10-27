@@ -26,19 +26,21 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
             android:layout_marginRight="10dp"
+            android:background="@drawable/selector_btn_bg"
             android:padding="6dp"
             android:text="@string/image_use"
-            android:background="@drawable/selector_btn_bg"
             android:textColor="#ffffff"
             android:textSize="15sp" />
     </FrameLayout>
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:background="#000000"
-        android:layout_height="match_parent">
-    <com.docwei.imageupload_lib.view.CropImageView
-        android:layout_width="match_parent"
-        android:id="@+id/iv_show"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="#000000">
+
+        <com.docwei.imageupload_lib.view.CropImageView
+            android:id="@+id/iv_show"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </FrameLayout>
 </LinearLayout>

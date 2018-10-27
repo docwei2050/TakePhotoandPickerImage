@@ -27,19 +27,73 @@ class AcpManager {
     private static final String TAG = "AcpManager";
     private static final int REQUEST_CODE_PERMISSION = 0x38;
     private static final int REQUEST_CODE_SETTING = 0x39;
+    private static final String MARK = Build.MANUFACTURER.toLowerCase();
+    private final List<String> mDeniedPermissions = new LinkedList<>();
+    private final Set<String> mManifestPermissions = new HashSet<>(1);
     private Context mContext;
     private Activity mActivity;
     private AcpService mService;
     private AcpOptions mOptions;
     private AcpListener mCallback;
-    private final List<String> mDeniedPermissions = new LinkedList<>();
-    private final Set<String> mManifestPermissions = new HashSet<>(1);
-    private boolean isNotFoundAct =false;
+    private boolean isNotFoundAct = false;
 
     AcpManager(Context context) {
         mContext = context;
         mService = new AcpService();
         getManifestPermissions();
+    }
+
+    private static Intent defaultApi(Context context) {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.setData(Uri.fromParts("package", context.getPackageName(), null));
+        return intent;
+    }
+
+    private static Intent huaweiApi(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return defaultApi(context);
+        }
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.permissionmanager.ui.MainActivity"));
+        return intent;
+    }
+
+    private static Intent xiaomiApi(Context context) {
+        Intent intent = new Intent("miui.intent.action.APP_PERM_EDITOR");
+        intent.putExtra("extra_pkgname", context.getPackageName());
+        return intent;
+    }
+
+    private static Intent vivoApi(Context context) {
+        Intent intent = new Intent();
+        intent.putExtra("packagename", context.getPackageName());
+        intent.setComponent(new ComponentName("com.vivo.permissionmanager", "com.vivo.permissionmanager.activity.SoftPermissionDetailActivity"));
+        if (hasActivity(context, intent)) return intent;
+
+        intent.setComponent(new ComponentName("com.iqoo.secure", "com.iqoo.secure.safeguard.SoftPermissionDetailActivity"));
+        return intent;
+    }
+
+    private static Intent oppoApi(Context context) {
+        Intent intent = new Intent();
+        intent.putExtra("packageName", context.getPackageName());
+        intent.setComponent(new ComponentName("com.color.safecenter", "com.color.safecenter.permission.PermissionManagerActivity"));
+        return intent;
+    }
+
+    private static Intent meizuApi(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return defaultApi(context);
+        }
+        Intent intent = new Intent("com.meizu.safe.security.SHOW_APPSEC");
+        intent.putExtra("packageName", context.getPackageName());
+        intent.setComponent(new ComponentName("com.meizu.safe", "com.meizu.safe.security.AppSecActivity"));
+        return intent;
+    }
+
+    private static boolean hasActivity(Context context, Intent intent) {
+        PackageManager packageManager = context.getPackageManager();
+        return packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() > 0;
     }
 
     /**
@@ -77,7 +131,6 @@ class AcpManager {
 
     /**
      * 检查权限
-     *
      */
     private synchronized void checkSelfPermission() {
         //6.0以下自动就获取了权限
@@ -94,12 +147,12 @@ class AcpManager {
             //检查申请的权限是否在 AndroidManifest.xml 中
             if (mManifestPermissions.contains(permission)) {
                 int checkSelfPermission = mService.checkSelfPermission(mContext, permission);
-                if(BuildConfig.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     Log.i(TAG, "checkSelfPermission = " + checkSelfPermission);
                 }
                 //如果是拒绝状态则装入拒绝集合中
                 if (checkSelfPermission == PackageManager.PERMISSION_DENIED) {
-                     mDeniedPermissions.add(permission);
+                    mDeniedPermissions.add(permission);
                 }
             }
         }
@@ -134,7 +187,7 @@ class AcpManager {
         for (String permission : mDeniedPermissions) {
             rationale = rationale || mService.shouldShowRequestPermissionRationale(mActivity, permission);
         }
-        if(BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "rationale = " + rationale);
         }
         String[] permissions = mDeniedPermissions.toArray(new String[mDeniedPermissions.size()]);
@@ -240,12 +293,12 @@ class AcpManager {
         }
         mCallback = null;
     }
-    private static final String MARK = Build.MANUFACTURER.toLowerCase();
+
     /**
      * 跳转到设置界面
      */
     private void startSetting() {
-        if(mActivity==null){
+        if (mActivity == null) {
             return;
         }
         Intent intent;
@@ -265,7 +318,7 @@ class AcpManager {
         try {
             mActivity.startActivityForResult(intent, REQUEST_CODE_SETTING);
         } catch (Exception e) {
-            isNotFoundAct =true;//可能是找不到对应的activity而报错，这里置为true
+            isNotFoundAct = true;//可能是找不到对应的activity而报错，这里置为true
         }
     }
 
@@ -282,73 +335,18 @@ class AcpManager {
             onDestroy();
             return;
         }
-        if(!isNotFoundAct) {
+        if (!isNotFoundAct) {
             checkSelfPermission();
-        }else{
+        } else {
             //因为跳转页面找不到act，所以重新走默认的api
-            isNotFoundAct =false;
+            isNotFoundAct = false;
             try {
                 Intent intent = defaultApi(mActivity);
                 mActivity.startActivityForResult(intent, REQUEST_CODE_SETTING);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
         }
-    }
-
-
-
-    private static Intent defaultApi(Context context) {
-        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        intent.setData(Uri.fromParts("package", context.getPackageName(), null));
-        return intent;
-    }
-
-    private static Intent huaweiApi(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return defaultApi(context);
-        }
-        Intent intent = new Intent();
-        intent.setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.permissionmanager.ui.MainActivity"));
-        return intent;
-    }
-
-    private static Intent xiaomiApi(Context context) {
-        Intent intent = new Intent("miui.intent.action.APP_PERM_EDITOR");
-        intent.putExtra("extra_pkgname", context.getPackageName());
-        return intent;
-    }
-
-    private static Intent vivoApi(Context context) {
-        Intent intent = new Intent();
-        intent.putExtra("packagename", context.getPackageName());
-        intent.setComponent(new ComponentName("com.vivo.permissionmanager", "com.vivo.permissionmanager.activity.SoftPermissionDetailActivity"));
-        if(hasActivity(context, intent)) return intent;
-
-        intent.setComponent(new ComponentName("com.iqoo.secure", "com.iqoo.secure.safeguard.SoftPermissionDetailActivity"));
-        return intent;
-    }
-
-    private static Intent oppoApi(Context context) {
-        Intent intent = new Intent();
-        intent.putExtra("packageName", context.getPackageName());
-        intent.setComponent(new ComponentName("com.color.safecenter", "com.color.safecenter.permission.PermissionManagerActivity"));
-        return intent;
-    }
-
-    private static Intent meizuApi(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return defaultApi(context);
-        }
-        Intent intent = new Intent("com.meizu.safe.security.SHOW_APPSEC");
-        intent.putExtra("packageName", context.getPackageName());
-        intent.setComponent(new ComponentName("com.meizu.safe", "com.meizu.safe.security.AppSecActivity"));
-        return intent;
-    }
-
-    private static boolean hasActivity(Context context, Intent intent) {
-        PackageManager packageManager = context.getPackageManager();
-        return packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() > 0;
     }
 }

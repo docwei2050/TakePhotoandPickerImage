@@ -30,15 +30,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import com.bumptech.glide.Glide;
 import com.docwei.imageupload_lib.GlideApp;
 import com.docwei.imageupload_lib.R;
-import com.docwei.imageupload_lib.album.bean.AlbumInfo;
 import com.docwei.imageupload_lib.album.GriditemDecoration;
-import com.docwei.imageupload_lib.album.bean.ImageBean;
 import com.docwei.imageupload_lib.album.ImageChooseAdapter;
 import com.docwei.imageupload_lib.album.SelectPhotosVH;
+import com.docwei.imageupload_lib.album.bean.AlbumInfo;
+import com.docwei.imageupload_lib.album.bean.ImageBean;
 import com.docwei.imageupload_lib.album.type.UsageType;
 import com.docwei.imageupload_lib.album.type.UsageTypeConstant;
 import com.docwei.imageupload_lib.constant.ImageConstant;
@@ -60,11 +58,11 @@ import java.util.Map;
 public class ImageChooseActivity extends AppCompatActivity implements ImageChooseAdapter.OnSelectImageListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_ID = 0;
-    private static final int REQUEST_CODE_PREVIEW=100;
+    private static final int REQUEST_CODE_PREVIEW = 100;
     private static final String CHOOSE_PHOTO_MAX_COUNT = "param_image_max_count";
+    public static String IMAGES = "images";
     private final String QUERY_ORDER = " desc";
     private final String ALL_ALBUM = "所有图片";
-    public static String IMAGES="images";
     private TextView mTv_count;
     private TextView mTv_title;
     private TextView mTv_select;
@@ -91,15 +89,17 @@ public class ImageChooseActivity extends AppCompatActivity implements ImageChoos
         intent.putExtra(ImageConstant.TYPE, type);
         activity.startActivityForResult(intent, requestCode);
     }
+
     public static void startUp(Activity activity, int imageCount, @UsageType String type) {
         Intent intent = new Intent(activity, ImageChooseActivity.class);
         intent.putExtra(CHOOSE_PHOTO_MAX_COUNT, imageCount);
         intent.putExtra(ImageConstant.TYPE, type);
         activity.startActivity(intent);
     }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             //取消设置透明状态栏,使 ContentView 内容不再覆盖状态栏
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -125,22 +125,22 @@ public class ImageChooseActivity extends AppCompatActivity implements ImageChoos
         mFr_anchor = findViewById(R.id.fr_anchor);
         mBtn_preview = findViewById(R.id.btn_preview);
         mOverlay = findViewById(R.id.tv_overlay);
-        mIv_back= findViewById(R.id.iv_back);
+        mIv_back = findViewById(R.id.iv_back);
     }
 
     private void initData() {
         mTv_title.setText(ALL_ALBUM);
-        Intent intent=getIntent();
+        Intent intent = getIntent();
         mMaxImageCount = intent.getIntExtra(CHOOSE_PHOTO_MAX_COUNT, 0);
         mType = intent.getStringExtra(ImageConstant.TYPE);
         mTv_count.setText(R.string.image_complete);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
         mRecyclerView.addItemDecoration(new GriditemDecoration(10, 10, Color.WHITE));
-        mAdapter = new ImageChooseAdapter(mMaxImageCount, this,mType);
+        mAdapter = new ImageChooseAdapter(mMaxImageCount, this, mType);
         mRecyclerView.setAdapter(mAdapter);
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
-        if(UsageTypeConstant.HEAD_PORTRAIT.equals(mType)){
+        if (UsageTypeConstant.HEAD_PORTRAIT.equals(mType)) {
             mFr_toolbar.setVisibility(View.GONE);
             mBtn_preview.setVisibility(View.GONE);
         }
@@ -155,7 +155,7 @@ public class ImageChooseActivity extends AppCompatActivity implements ImageChoos
                         int width = mTv_count.getWidth();
                         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mOverlay.getLayoutParams();
                         layoutParams.width = width;
-                        layoutParams.height=mTv_count.getHeight();
+                        layoutParams.height = mTv_count.getHeight();
                         mOverlay.setLayoutParams(layoutParams);
                         mTv_count.getViewTreeObserver()
                                 .removeOnGlobalLayoutListener(this);
@@ -189,7 +189,7 @@ public class ImageChooseActivity extends AppCompatActivity implements ImageChoos
         mBtn_preview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PreviewAllSelectActivity.startActivityForResult(getImagePath(), ImageChooseActivity.this,REQUEST_CODE_PREVIEW);
+                PreviewAllSelectActivity.startActivityForResult(getImagePath(), ImageChooseActivity.this, REQUEST_CODE_PREVIEW);
             }
         });
         mAdapter.setOnImagePreviewListener(new ImageChooseAdapter.OnImagePreviewOrCropListener() {
@@ -216,7 +216,7 @@ public class ImageChooseActivity extends AppCompatActivity implements ImageChoos
 
             @Override
             public void cropImage(String imagePath) {
-                CropImageActivity.startActivity(ImageChooseActivity.this,imagePath);
+                CropImageActivity.startActivity(ImageChooseActivity.this, imagePath);
                 finish();
             }
         });
@@ -370,8 +370,8 @@ public class ImageChooseActivity extends AppCompatActivity implements ImageChoos
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==REQUEST_CODE_PREVIEW&&resultCode==RESULT_OK){
-            if(data!=null) {
+        if (requestCode == REQUEST_CODE_PREVIEW && resultCode == RESULT_OK) {
+            if (data != null) {
                 Intent intent = new Intent(data);
                 setResult(RESULT_OK, intent);
                 finish();
@@ -383,10 +383,9 @@ public class ImageChooseActivity extends AppCompatActivity implements ImageChoos
     public void onBackPressed() {
         super.onBackPressed();
         // ImageSelectProxyActivity是一个透明act，手动触发其onNewIntent调用
-        Intent intent=new Intent(ImageChooseActivity.this,ImageSelectProxyActivity.class);
+        Intent intent = new Intent(ImageChooseActivity.this, ImageSelectProxyActivity.class);
         startActivity(intent);
     }
-
 
 
     @Override

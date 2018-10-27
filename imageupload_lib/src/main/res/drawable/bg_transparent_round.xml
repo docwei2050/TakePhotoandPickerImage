@@ -4,7 +4,7 @@
     <item android:state_pressed="true">
         <shape>
             <corners android:radius="1000dp" />
-            <padding android:left="10dp" android:top="10dp" android:right="10dp" android:bottom="10dp" />
+            <padding android:bottom="10dp" android:left="10dp" android:right="10dp" android:top="10dp" />
             <solid android:color="@color/image_bg" />
         </shape>
 
@@ -13,7 +13,7 @@
     <item>
         <shape>
             <corners android:radius="1000dp" />
-            <padding android:left="10dp" android:top="10dp" android:right="10dp" android:bottom="10dp" />
+            <padding android:bottom="10dp" android:left="10dp" android:right="10dp" android:top="10dp" />
             <solid android:color="#00ffffff" />
         </shape>
     </item>

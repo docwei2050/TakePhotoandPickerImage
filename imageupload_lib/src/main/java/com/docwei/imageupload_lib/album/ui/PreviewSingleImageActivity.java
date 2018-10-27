@@ -16,7 +16,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-
 import com.docwei.imageupload_lib.GlideApp;
 import com.docwei.imageupload_lib.R;
 import com.github.chrisbanes.photoview.PhotoView;
@@ -28,16 +27,18 @@ import com.github.chrisbanes.photoview.PhotoView;
 public class PreviewSingleImageActivity extends AppCompatActivity {
     public static final String IMAGE_PATH = "imagePath";
     public static final String SHARED_ELEMENT_NAME = "preview";
-    public static void startActivity(Activity src,String imagePath,View view){
-        Intent                intent        =new Intent(src, PreviewSingleImageActivity.class);
-        intent.putExtra(IMAGE_PATH,imagePath);
-        ActivityOptionsCompat optionsCompat =ActivityOptionsCompat.makeSceneTransitionAnimation(src, view, "preview");
+
+    public static void startActivity(Activity src, String imagePath, View view) {
+        Intent intent = new Intent(src, PreviewSingleImageActivity.class);
+        intent.putExtra(IMAGE_PATH, imagePath);
+        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(src, view, "preview");
         ActivityCompat.startActivity(src, intent, optionsCompat.toBundle());
     }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             //取消设置透明状态栏,使 ContentView 内容不再覆盖状态栏
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -48,15 +49,15 @@ public class PreviewSingleImageActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_preview_single);
         PhotoView iv_show = findViewById(R.id.iv_show);
-        ImageView iv_back=findViewById(R.id.iv_back);
-        Intent    intent  =getIntent();
-        if(intent!=null){
-            String imagePath=intent.getStringExtra(IMAGE_PATH);
+        ImageView iv_back = findViewById(R.id.iv_back);
+        Intent intent = getIntent();
+        if (intent != null) {
+            String imagePath = intent.getStringExtra(IMAGE_PATH);
             GlideApp.with(this).load(imagePath).into(iv_show);
         }
 
         ViewCompat.setTransitionName(iv_show, SHARED_ELEMENT_NAME);
-        iv_show.setOnDoubleTapListener(new GestureDetector.SimpleOnGestureListener(){
+        iv_show.setOnDoubleTapListener(new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onDoubleTap(MotionEvent e) {
                 ActivityCompat.finishAfterTransition(PreviewSingleImageActivity.this);

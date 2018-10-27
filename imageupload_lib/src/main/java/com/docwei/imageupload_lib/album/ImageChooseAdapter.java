@@ -22,6 +22,7 @@ import java.util.List;
  */
 
 public class ImageChooseAdapter extends RecyclerView.Adapter<ImageChooseAdapter.ViewHolder> implements View.OnClickListener {
+    public OnImagePreviewOrCropListener mOnImagePreviewListener;
     private List<ImageBean> dataList = new ArrayList<>();
     private OnSelectImageListener listener;
     private int maxCount;
@@ -50,14 +51,13 @@ public class ImageChooseAdapter extends RecyclerView.Adapter<ImageChooseAdapter.
         final ViewHolder holder = new ViewHolder(view);
         if (mType.equals(UsageTypeConstant.HEAD_PORTRAIT)) {
             holder.mCbImg.setVisibility(View.GONE);
-        }else {
+        } else {
             holder.mCbImg.setOnClickListener(this);
         }
         holder.mFr_container.setOnClickListener(this);
 
         return holder;
     }
-
 
     @SuppressWarnings("deprecation")
     @Override
@@ -136,6 +136,22 @@ public class ImageChooseAdapter extends RecyclerView.Adapter<ImageChooseAdapter.
 
     }
 
+    public void setOnImagePreviewListener(OnImagePreviewOrCropListener onImagePreviewListener) {
+        mOnImagePreviewListener = onImagePreviewListener;
+    }
+
+    public interface OnSelectImageListener {
+        void selectIsFull();
+
+        void selectImages(List<ImageBean> bean);
+
+    }
+
+    public interface OnImagePreviewOrCropListener {
+        void previewImage(String imagePath, View iv);
+
+        void cropImage(String imagePath);
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -151,25 +167,6 @@ public class ImageChooseAdapter extends RecyclerView.Adapter<ImageChooseAdapter.
             mCbImg = itemView.findViewById(R.id.cb_image);
             mOverlay = itemView.findViewById(R.id.overlay);
         }
-    }
-
-    public interface OnSelectImageListener {
-        void selectIsFull();
-
-        void selectImages(List<ImageBean> bean);
-
-    }
-
-    public OnImagePreviewOrCropListener mOnImagePreviewListener;
-
-    public void setOnImagePreviewListener(OnImagePreviewOrCropListener onImagePreviewListener) {
-        mOnImagePreviewListener = onImagePreviewListener;
-    }
-
-    public interface OnImagePreviewOrCropListener {
-        void previewImage(String imagePath, View iv);
-
-        void cropImage(String imagePath);
     }
 
 

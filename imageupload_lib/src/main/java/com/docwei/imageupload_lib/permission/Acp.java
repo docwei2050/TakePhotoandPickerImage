@@ -10,6 +10,10 @@ public class Acp {
     private static Acp mInstance;
     private AcpManager mAcpManager;
 
+    private Acp(Context context) {
+        mAcpManager = new AcpManager(context.getApplicationContext());
+    }
+
     public static Acp getInstance(Context context) {
         if (mInstance == null)
             synchronized (Acp.class) {
@@ -18,10 +22,6 @@ public class Acp {
                 }
             }
         return mInstance;
-    }
-
-    private Acp(Context context) {
-        mAcpManager = new AcpManager(context.getApplicationContext());
     }
 
     /**

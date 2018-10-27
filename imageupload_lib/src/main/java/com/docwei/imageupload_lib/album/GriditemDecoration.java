@@ -15,12 +15,12 @@ import android.view.View;
 
 public class GriditemDecoration extends RecyclerView.ItemDecoration {
     private Paint mPaint;
-    private int   mDividerWidth;
+    private int mDividerWidth;
     private int mDividerHeight;
 
     public GriditemDecoration(int width, int height, @ColorInt int color) {
         mDividerWidth = width;
-        mDividerHeight=height;
+        mDividerHeight = height;
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(color);
         mPaint.setStyle(Paint.Style.FILL);
@@ -30,8 +30,8 @@ public class GriditemDecoration extends RecyclerView.ItemDecoration {
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
-        if(!(parent.getLayoutManager() instanceof GridLayoutManager || parent.getLayoutManager() instanceof StaggeredGridLayoutManager)){
-            outRect.set(0,0,0,mDividerHeight);
+        if (!(parent.getLayoutManager() instanceof GridLayoutManager || parent.getLayoutManager() instanceof StaggeredGridLayoutManager)) {
+            outRect.set(0, 0, 0, mDividerHeight);
             return;
         }
         // 获取当前的位置
@@ -53,7 +53,7 @@ public class GriditemDecoration extends RecyclerView.ItemDecoration {
         left = itemPosition % spanCount * dl;
         right = eachWidth - left;
         bottom = mDividerHeight;
-        if (isLastRow){
+        if (isLastRow) {
             bottom = 0;
         }
         outRect.set(left, top, right, bottom);
@@ -70,7 +70,7 @@ public class GriditemDecoration extends RecyclerView.ItemDecoration {
     private void draw(Canvas canvas, RecyclerView parent) {
         int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
-            View                      child        = parent.getChildAt(i);
+            View child = parent.getChildAt(i);
             RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) child.getLayoutParams();
 
             //画水平分隔线
@@ -171,7 +171,7 @@ public class GriditemDecoration extends RecyclerView.ItemDecoration {
 
     //获取列数
     private int getSpanCount(RecyclerView parent) {
-        int                        spanCount     = -1;
+        int spanCount = -1;
         RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
 

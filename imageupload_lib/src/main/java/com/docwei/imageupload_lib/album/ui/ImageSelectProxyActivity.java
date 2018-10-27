@@ -2,7 +2,6 @@ package com.docwei.imageupload_lib.album.ui;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -13,9 +12,6 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.docwei.imageupload_lib.R;
@@ -53,7 +49,7 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
      * @param context
      * @param count   上传的数量
      */
-    public static void selectImage(Activity context,@UsageType String type, int count) {
+    public static void selectImage(Activity context, @UsageType String type, int count) {
         Intent intent = new Intent(context, ImageSelectProxyActivity.class);
         intent.putExtra(ImageConstant.TYPE, type);
         intent.putExtra(ImageConstant.COUNT, count);
@@ -75,7 +71,7 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if(intent!=null){
+        if (intent != null) {
             setResult(RESULT_OK, intent);
         }
         finish();
@@ -161,11 +157,11 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
             Intent intent = new Intent();
             if (requestCode == TAKE_PHOTO) {
                 //头像类型，需要裁剪
-                if(mType.equals(UsageTypeConstant.HEAD_PORTRAIT)){
-                    CropImageActivity.startActivity(this,mImageUri.toString());
+                if (mType.equals(UsageTypeConstant.HEAD_PORTRAIT)) {
+                    CropImageActivity.startActivity(this, mImageUri.toString());
                     return;
-                }else {
-                //其他类型，一律不裁剪
+                } else {
+                    //其他类型，一律不裁剪
                     images = new ArrayList<>(1);
                     images.add(mImageUri.toString());
                     intent.putExtra(ImageConstant.SELECTED_IAMGES, images);
@@ -188,7 +184,7 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode==KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             finish();
         }
         return super.onKeyDown(keyCode, event);
