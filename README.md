@@ -14,7 +14,7 @@
 
 截图如下
 
-<img src="https://github.com/docwei2050/TakePhotoandPickerImage/blob/master/screenshot/Screenshot_20181028-003555.png" width=270 height=480 />  <img src=https://github.com/docwei2050/TakePhotoandPickerImage/blob/master/screenshot/Screenshot_20181028-003559.png" width=270 height=480 />
+<img src="https://github.com/docwei2050/TakePhotoandPickerImage/blob/master/screenshot/Screenshot_20181028-003555.png" width=270 height=480 />  <img src="https://github.com/docwei2050/TakePhotoandPickerImage/blob/master/screenshot/Screenshot_20181028-003559.png" width=270 height=480 />
 
 <img src="https://github.com/docwei2050/TakePhotoandPickerImage/blob/master/screenshot/Screenshot_20181028-003614.png" width=270 height=480 />  <img src="https://github.com/docwei2050/TakePhotoandPickerImage/blob/master/screenshot/Screenshot_20181028-003642.png" width=270 height=480 />
 
