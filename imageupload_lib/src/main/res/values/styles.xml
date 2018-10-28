@@ -11,14 +11,6 @@
     <declare-styleable name="RectImageView">
         <attr name="iv_ratio" format="float" />
     </declare-styleable>
-    <!--权限界面是透明主题-->
-    <style name="Theme.Transparent" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:backgroundDimEnabled">false</item>
-    </style>
 
     <!--透明背景的act-->
     <style name="Transparent" parent="Theme.AppCompat.Light.NoActionBar">
