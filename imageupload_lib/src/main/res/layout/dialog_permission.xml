@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="20dp"
+    android:background="@drawable/shape_rectangle_dialog_radius"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/permisson_dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingRight="20dp"
+        android:paddingLeft="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        />
+
+    <TextView
+        android:id="@+id/permisson_dialog_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:textColor="#353535"
+        android:textSize="15sp" />
+
+    <LinearLayout
+        android:id="@+id/dialog_btn"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/permisson_btn_left"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_btn_ios_left"
+            android:text="取消"
+            android:textColor="#4665FF"
+            android:textSize="17sp" />
+        <Button
+            android:id="@+id/permisson_btn_right"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_btn_ios_right"
+            android:text="@string/dialog_confirm"
+            android:textColor="#4665FF"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>

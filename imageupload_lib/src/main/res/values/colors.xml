@@ -7,12 +7,14 @@
     <color name="text_bg_light">#33000000</color>
     <color name="dialogplus_black_overlay">#60000000</color>
     <color name="color_status_bar">#aa000000</color>
+    <color name="black">#000000</color>
     <color name="common_color_light_grey_bg">#FF949494</color>
 
     <color name="common_color_title_green">#FF35A452</color>
     <color name="common_color_light_green5">#FF55B570</color>
 
     <color name="image_bg">#FFE3E3E3</color>
+    <color name="color_EEEEEE">#EEEEEE</color>
     <color name="image_white">#ffffff</color>
     <color name="text_blue">#990000FF</color>
     <color name="text_light_blue">#880000FF</color>

@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -16,7 +15,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -210,13 +208,21 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
      *  解释性对话框
      */
     private void showRationaleDialog(final String permission, final int requestCode) {
-        new AlertDialog.Builder(this).setMessage("应用需要访问您的相册获取图片，请允许此次授权。").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+        PermissionDialog rationaleVh=new PermissionDialog(this,PermissionDialog.TYPE_RATIONALE);
+        rationaleVh.show();
+        rationaleVh.setTitle("请允许获取存储权限").setContent("我们需要获取存储权限，才能访问相册选择图片，请授予该该权限。");
+        rationaleVh.setPermissionDialogListener(new PermissionDialog.SimplePermissionDialog() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+            public void rightButtonEvent() {
                 ActivityCompat.requestPermissions(ImageSelectProxyActivity.this, new String[]{permission}, requestCode);
             }
-        }).setCancelable(false).show();
+            @Override
+            public void leftButtonEvent() {
+                finish();
+            }
+        });
+
 
     }
     @Override
@@ -245,20 +251,23 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
      * @param permission 拒绝的权限
      */
     private void showDenyDialog(final String permission) {
-        new AlertDialog.Builder(this).setMessage("使用相册图片需要获取存储权限,您可以在设置-->权限页面去开启此权限。").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+        PermissionDialog dialog=new PermissionDialog(this,PermissionDialog.TYPE_RATIONALE);
+        dialog.show();
+        dialog.setTitle("请允许获取存储权限").setContent("由于应用无法获取存储权限,无法选择图片，请开启权限后再使用。您可以在设置-->权限页面去开启。")
+                .setLeftText("拒绝").setRightText("去设置");
+        dialog.setPermissionDialogListener(new PermissionDialog.SimplePermissionDialog() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+            public void rightButtonEvent() {
                 startSetting();
             }
-        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+            public void leftButtonEvent() {
                 finish();//因为ImageSelectProxyAct是一个透明ACT
             }
+        });
 
-        }).setCancelable(false).show();
+
     }
 
 
