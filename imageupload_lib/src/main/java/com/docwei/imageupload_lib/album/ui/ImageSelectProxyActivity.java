@@ -211,7 +211,7 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
 
         PermissionDialog rationaleVh=new PermissionDialog(this,PermissionDialog.TYPE_RATIONALE);
         rationaleVh.show();
-        rationaleVh.setTitle("请允许获取存储权限").setContent("我们需要获取存储权限，才能访问相册选择图片，请授予该该权限。");
+        rationaleVh.setTitle(getString(R.string.dialog_msg_title)).setContent(getString(R.string.dialog_msg_rationale_content));
         rationaleVh.setPermissionDialogListener(new PermissionDialog.SimplePermissionDialog() {
             @Override
             public void rightButtonEvent() {
@@ -254,8 +254,8 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
 
         PermissionDialog dialog=new PermissionDialog(this,PermissionDialog.TYPE_RATIONALE);
         dialog.show();
-        dialog.setTitle("请允许获取存储权限").setContent("由于应用无法获取存储权限,无法选择图片，请开启权限后再使用。您可以在设置-->权限页面去开启。")
-                .setLeftText("拒绝").setRightText("去设置");
+        dialog.setTitle(getString(R.string.dialog_msg_title)).setContent(getString(R.string.dialog_msg_deny_content))
+                .setLeftText(getString(R.string.dialog_deny)).setRightText(getString(R.string.dialog_go_setting));
         dialog.setPermissionDialogListener(new PermissionDialog.SimplePermissionDialog() {
             @Override
             public void rightButtonEvent() {

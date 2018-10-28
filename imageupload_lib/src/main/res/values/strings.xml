@@ -19,4 +19,9 @@
     <string name="msg_crop_error">裁剪图片失败，请重试</string>
     <string name="dialog_cancel">取消</string>
     <string name="dialog_confirm">确定</string>
+    <string name="dialog_msg_title">请允许获取存储权限</string>
+    <string name="dialog_msg_rationale_content">我们需要获取存储权限，才能访问相册选择图片，请授予该该权限。</string>
+    <string name="dialog_msg_deny_content"><![CDATA[由于应用无法获取存储权限,无法选择图片，请开启权限后再使用。您可以在设置-->权限页面去开启。]]></string>
+    <string name="dialog_deny">拒绝</string>
+    <string name="dialog_go_setting">去设置</string>
 </resources>
