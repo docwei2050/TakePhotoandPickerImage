@@ -2,10 +2,10 @@
 #### 整体思路：把图片选择的逻辑封装到一个透明Activity（ImageSelectProxyActivity）去完成，减少宿主页面逻辑。
 ##### 使用(两步走)：
 ###### 1.启动相册、拍照的弹窗：
->  场景一：类似于发朋友圈上传图片：不涉及裁剪图片
-          > >  ```ImageSelectProxyActivity.selectImage(ImageActivity.this, UsageTypeConstant.OTHER, 9); ```
->  场景二：更换头像：裁剪图片
-         > >   ``` ImageSelectProxyActivity.selectImage(ImageActivity.this, UsageTypeConstant.HEAD_PORTRAIT, 1); ```
+>  <br>场景一：类似于发朋友圈上传图片：不涉及裁剪图片</br>
+         ```ImageSelectProxyActivity.selectImage(ImageActivity.this, UsageTypeConstant.OTHER, 9); ```
+>  <br>场景二：更换头像：裁剪图片</br>
+         ```ImageSelectProxyActivity.selectImage(ImageActivity.this, UsageTypeConstant.HEAD_PORTRAIT, 1); ```
 ###### 2.接收数据：
   ```@Override
      protected void onActivityResult(int requestCode, int resultCode, Intent data) {
