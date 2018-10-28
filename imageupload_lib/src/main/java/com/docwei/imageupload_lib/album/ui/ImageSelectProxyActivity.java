@@ -40,6 +40,7 @@ import java.util.Locale;
  */
 public class ImageSelectProxyActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_WRITE = 127;//读写权限申请
+    private static final int REQUEST_CODE_CAMERA = 128;//相机权限
     private static final int REQUEST_CODE_SETTING = 0x39;
     private Uri mImageUri;
     private int TAKE_PHOTO = 100;
@@ -95,32 +96,9 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
             @Override
             public void takePhoto() {
                 //使用相机拍照显示图片，这里保存在该app的关联目录--缓存目录下，所以无需进行外置SD卡的读取权限
-                //注意：调用系统相机拍照无需使用相机权限
+                //注意：调用系统相机拍照无需使用相机权限,但是清单文件声明相机权限了就一定要检测权限
                 //但是由于4.4以前的系统访问关联目录--缓存目录需要sd卡权限，我们为了兼容老版本加上。。
-
-                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
-                        Locale.getDefault()).format(new Date());
-                String imageFileName = "JPEG_" + timeStamp + "_" + ".jpg";
-                File outputImage = new File(getExternalCacheDir(), imageFileName);
-                try {
-                    if (outputImage.exists()) {
-                        outputImage.delete();
-                    }
-                    outputImage.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if (Build.VERSION.SDK_INT >= 24) {
-                    mImageUri = FileProvider.getUriForFile(ImageSelectProxyActivity.this,
-                            "com.docwei.imageupload_lib.fileprovider",
-                            outputImage);
-                } else {
-                    mImageUri = Uri.fromFile(outputImage);
-                }
-                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-                startActivityForResult(intent, TAKE_PHOTO);
-
+                checkCameraPermissionBeforeTakePhoto();
             }
 
             @Override
@@ -129,6 +107,39 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
             }
         });
     }
+    private void checkCameraPermissionBeforeTakePhoto() {
+        if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
+            requestSinglePermission(Manifest.permission.CAMERA,  REQUEST_CODE_CAMERA);
+        } else {
+            handleTakePhoto();
+        }
+    }
+
+    private void handleTakePhoto() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_" + ".jpg";
+        File outputImage = new File(getExternalCacheDir(), imageFileName);
+        try {
+            if (outputImage.exists()) {
+                outputImage.delete();
+            }
+            outputImage.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (Build.VERSION.SDK_INT >= 24) {
+            mImageUri = FileProvider.getUriForFile(ImageSelectProxyActivity.this,
+                    "com.docwei.imageupload_lib.fileprovider",
+                    outputImage);
+        } else {
+            mImageUri = Uri.fromFile(outputImage);
+        }
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+        startActivityForResult(intent, TAKE_PHOTO);
+    }
+
 
     private void selectImageFromGallery(int count) {
         if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) ||
@@ -212,7 +223,11 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
 
         PermissionDialog rationaleVh=new PermissionDialog(this);
         rationaleVh.show();
-        rationaleVh.setTitle(getString(R.string.dialog_msg_title)).setContent(getString(R.string.dialog_msg_rationale_content));
+        if(requestCode==REQUEST_CODE_WRITE) {
+            rationaleVh.setTitle(getString(R.string.dialog_msg_storage_title)).setContent(getString(R.string.dialog_msg_rationale_storage_content));
+        }else if(requestCode==REQUEST_CODE_CAMERA){
+            rationaleVh.setTitle(getString(R.string.dialog_msg_camera_title)).setContent(getString(R.string.dialog_msg_rationale_camera_content));
+        }
         rationaleVh.setPermissionDialogListener(new PermissionDialog.SimplePermissionDialog() {
             @Override
             public void rightButtonEvent() {
@@ -233,12 +248,14 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
                 if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     selectImage(mCount);
                 } else {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[0])) {
-                        showRationaleDialog(permissions[0], requestCode);
-                    } else {
-                        //用户点击禁止会不再询问，就不会再弹出，请用户在设置界面再进行权限打开
-                        showDenyDialog(permissions[0]);
-                    }
+                    performUnGrant(requestCode, permissions[0]);
+                }
+                break;
+            case REQUEST_CODE_CAMERA:
+                if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    handleTakePhoto();
+                } else {
+                    performUnGrant(requestCode, permissions[0]);
                 }
                 break;
             default:
@@ -247,16 +264,30 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
         }
     }
 
+    private void performUnGrant(int requestCode, String permission) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+            showRationaleDialog(permission, requestCode);
+        } else {
+            //用户点击禁止会不再询问，就不会再弹出，请用户在设置界面再进行权限打开
+            showDenyDialog(requestCode);
+        }
+    }
+
     /**
      *  用户点击不再提示，禁止后的对话框
-     * @param permission 拒绝的权限
      */
-    private void showDenyDialog(final String permission) {
+    private void showDenyDialog(int requestCode) {
 
         PermissionDialog dialog=new PermissionDialog(this);
         dialog.show();
-        dialog.setTitle(getString(R.string.dialog_msg_title)).setContent(getString(R.string.dialog_msg_deny_content))
-                .setLeftText(getString(R.string.dialog_deny)).setRightText(getString(R.string.dialog_go_setting));
+        if(requestCode==REQUEST_CODE_WRITE) {
+            dialog.setTitle(getString(R.string.dialog_msg_storage_title)).setContent(getString(R.string.dialog_msg_deny_storage_content))
+                    .setLeftText(getString(R.string.dialog_deny)).setRightText(getString(R.string.dialog_go_setting));
+        }else if(requestCode==REQUEST_CODE_CAMERA){
+            dialog.setTitle(getString(R.string.dialog_msg_camera_title)).setContent(getString(R.string.dialog_msg_deny_camera_content))
+                    .setLeftText(getString(R.string.dialog_deny)).setRightText(getString(R.string.dialog_go_setting));
+        }
+
         dialog.setPermissionDialogListener(new PermissionDialog.SimplePermissionDialog() {
             @Override
             public void rightButtonEvent() {
