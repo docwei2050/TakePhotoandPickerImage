@@ -20,6 +20,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 
 import com.docwei.imageupload_lib.R;
+import com.docwei.imageupload_lib.album.PermissionDialog;
 import com.docwei.imageupload_lib.album.TakePhotoVH;
 import com.docwei.imageupload_lib.album.type.UsageType;
 import com.docwei.imageupload_lib.album.type.UsageTypeConstant;

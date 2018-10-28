@@ -1,4 +1,4 @@
-package com.docwei.imageupload_lib.album.ui;
+package com.docwei.imageupload_lib.album;
 
 import android.app.Activity;
 import android.app.AlertDialog;
