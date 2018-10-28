@@ -1,5 +1,5 @@
 
-#### 整体思路：把图片选择的逻辑封装到一个透明Activity（ImageSelectProxyActivity）去完成，减少宿主页面逻辑。
+#### 整体思路：把图片选择的逻辑封装到一个透明Activity（ImageSelectProxyActivity），减少宿主页面逻辑。
 ##### 使用(两步走)：
 ##### 1.启动相册、拍照的弹窗：
 >  <br>场景一：类似于发朋友圈上传图片：不涉及裁剪图片</br>
