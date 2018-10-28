@@ -210,7 +210,7 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
      */
     private void showRationaleDialog(final String permission, final int requestCode) {
 
-        PermissionDialog rationaleVh=new PermissionDialog(this,PermissionDialog.TYPE_RATIONALE);
+        PermissionDialog rationaleVh=new PermissionDialog(this);
         rationaleVh.show();
         rationaleVh.setTitle(getString(R.string.dialog_msg_title)).setContent(getString(R.string.dialog_msg_rationale_content));
         rationaleVh.setPermissionDialogListener(new PermissionDialog.SimplePermissionDialog() {
@@ -253,7 +253,7 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
      */
     private void showDenyDialog(final String permission) {
 
-        PermissionDialog dialog=new PermissionDialog(this,PermissionDialog.TYPE_RATIONALE);
+        PermissionDialog dialog=new PermissionDialog(this);
         dialog.show();
         dialog.setTitle(getString(R.string.dialog_msg_title)).setContent(getString(R.string.dialog_msg_deny_content))
                 .setLeftText(getString(R.string.dialog_deny)).setRightText(getString(R.string.dialog_go_setting));

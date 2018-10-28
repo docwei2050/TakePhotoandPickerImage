@@ -21,27 +21,19 @@ import com.docwei.imageupload_lib.R;
  * 权限的弹窗
  */
 public class PermissionDialog extends AlertDialog {
-    public static final int TYPE_RATIONALE = 0; //解释性对话框
-    public static final int TYPE_DENY = 1; //拒绝对话框
-
-    private Activity mContext;
-    private View mContentContainer;
-    private int mDialogType;
     private TextView mTv_title;
     private TextView mTv_content;
     private Button mBtn_left;
     private Button mBtn_right;
 
-    protected PermissionDialog(Context context) {
+    public PermissionDialog(Context context) {
         super(context);
-
     }
-
-    protected PermissionDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
+    public PermissionDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
     }
 
-    protected PermissionDialog(Context context, int themeResId) {
+    public PermissionDialog(Context context, int themeResId) {
         super(context, themeResId);
 
     }
