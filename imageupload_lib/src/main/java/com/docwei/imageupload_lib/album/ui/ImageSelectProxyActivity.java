@@ -132,7 +132,7 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
         }
         if (Build.VERSION.SDK_INT >= 24) {
             mImageUri = FileProvider.getUriForFile(ImageSelectProxyActivity.this,
-                    getPackageName().concat(".fileprovider"),
+                    getPackageName().concat(".image.fileprovider"),
                     outputImage);
         } else {
             mImageUri = Uri.fromFile(outputImage);
