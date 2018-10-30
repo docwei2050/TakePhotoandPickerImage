@@ -42,6 +42,7 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_WRITE = 127;//读写权限申请
     private static final int REQUEST_CODE_CAMERA = 128;//相机权限
     private static final int REQUEST_CODE_SETTING = 0x39;
+    private boolean isFromCamera;
     private Uri mImageUri;
     private int TAKE_PHOTO = 100;
     private int SELECT_ALBUM = 101;
@@ -107,9 +108,10 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
             }
         });
     }
+
     private void checkCameraPermissionBeforeTakePhoto() {
         if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
-            requestSinglePermission(Manifest.permission.CAMERA,  REQUEST_CODE_CAMERA);
+            requestSinglePermission(Manifest.permission.CAMERA, REQUEST_CODE_CAMERA);
         } else {
             handleTakePhoto();
         }
@@ -144,7 +146,7 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
     private void selectImageFromGallery(int count) {
         if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) ||
                 (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
-            requestSinglePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,  REQUEST_CODE_WRITE);
+            requestSinglePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, REQUEST_CODE_WRITE);
         } else {
             selectImage(count);
         }
@@ -165,7 +167,11 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_SETTING) {
             // 从设置页面返回再次检测权限是否获取
-            selectImageFromGallery(mCount);
+            if(isFromCamera){
+                checkCameraPermissionBeforeTakePhoto();
+            }else {
+                selectImageFromGallery(mCount);
+            }
             return;
         }
         if (RESULT_OK == resultCode) {
@@ -208,7 +214,7 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
 
 
     //-------------------------------------- 处理读取sd卡权限-----------start-----------------
-    public void requestSinglePermission(String permission,  int requestCode) {
+    public void requestSinglePermission(String permission, int requestCode) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
             showRationaleDialog(permission, requestCode);
         } else {
@@ -217,15 +223,15 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
     }
 
     /**
-     *  解释性对话框
+     * 解释性对话框
      */
     private void showRationaleDialog(final String permission, final int requestCode) {
 
-        PermissionDialog rationaleVh=new PermissionDialog(this);
+        PermissionDialog rationaleVh = new PermissionDialog(this);
         rationaleVh.show();
-        if(requestCode==REQUEST_CODE_WRITE) {
+        if (requestCode == REQUEST_CODE_WRITE) {
             rationaleVh.setTitle(getString(R.string.dialog_msg_storage_title)).setContent(getString(R.string.dialog_msg_rationale_storage_content));
-        }else if(requestCode==REQUEST_CODE_CAMERA){
+        } else if (requestCode == REQUEST_CODE_CAMERA) {
             rationaleVh.setTitle(getString(R.string.dialog_msg_camera_title)).setContent(getString(R.string.dialog_msg_rationale_camera_content));
         }
         rationaleVh.setPermissionDialogListener(new PermissionDialog.SimplePermissionDialog() {
@@ -233,6 +239,7 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
             public void rightButtonEvent() {
                 ActivityCompat.requestPermissions(ImageSelectProxyActivity.this, new String[]{permission}, requestCode);
             }
+
             @Override
             public void leftButtonEvent() {
                 finish();
@@ -241,6 +248,7 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
 
 
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -270,20 +278,25 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
         } else {
             //用户点击禁止会不再询问，就不会再弹出，请用户在设置界面再进行权限打开
             showDenyDialog(requestCode);
+            if(permission.equals(Manifest.permission.CAMERA)){
+                isFromCamera=true;
+            }else{
+                isFromCamera=false;
+            }
         }
     }
 
     /**
-     *  用户点击不再提示，禁止后的对话框
+     * 用户点击不再提示，禁止后的对话框
      */
     private void showDenyDialog(int requestCode) {
 
-        PermissionDialog dialog=new PermissionDialog(this);
+        PermissionDialog dialog = new PermissionDialog(this);
         dialog.show();
-        if(requestCode==REQUEST_CODE_WRITE) {
+        if (requestCode == REQUEST_CODE_WRITE) {
             dialog.setTitle(getString(R.string.dialog_msg_storage_title)).setContent(getString(R.string.dialog_msg_deny_storage_content))
                     .setLeftText(getString(R.string.dialog_deny)).setRightText(getString(R.string.dialog_go_setting));
-        }else if(requestCode==REQUEST_CODE_CAMERA){
+        } else if (requestCode == REQUEST_CODE_CAMERA) {
             dialog.setTitle(getString(R.string.dialog_msg_camera_title)).setContent(getString(R.string.dialog_msg_deny_camera_content))
                     .setLeftText(getString(R.string.dialog_deny)).setRightText(getString(R.string.dialog_go_setting));
         }
@@ -293,6 +306,7 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
             public void rightButtonEvent() {
                 startSetting();
             }
+
             @Override
             public void leftButtonEvent() {
                 finish();//因为ImageSelectProxyAct是一个透明ACT
@@ -301,7 +315,6 @@ public class ImageSelectProxyActivity extends AppCompatActivity {
 
 
     }
-
 
 
     //***************************适配不同手机去做跳转****************start*******************************************************
